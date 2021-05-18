@@ -10,7 +10,7 @@ class Employee extends Model
     use HasFactory;
 
     protected $fillable = [
-        'employee_name',
+        'name',
         'number',
         'email',
         'address',
@@ -19,7 +19,6 @@ class Employee extends Model
         'pan_card',
         'resume',
         'password',
-        'confirm_password',
         'photo',
         'wallet_balance'
     ];

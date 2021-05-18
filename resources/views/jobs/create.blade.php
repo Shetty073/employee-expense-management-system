@@ -8,7 +8,13 @@
 
 @section('content')
 
+<div class="card px-3 py-1">
 
+    <form method="POST" action="{{ route('jobs.store') }}">
+        @include('jobs.form')
+    </form>
+
+</div>
 
 @stop
 

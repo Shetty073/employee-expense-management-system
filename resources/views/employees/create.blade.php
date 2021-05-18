@@ -7,7 +7,15 @@
 @stop
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+
+<div class="card px-3 py-1">
+
+    <form method="POST" action="{{ route('employees.store') }}">
+        @include('employees.form')
+    </form>
+
+</div>
+
 @stop
 
 @section('css')

@@ -25,16 +25,19 @@ Route::group(['prefix' => '/'/*, 'middleware' => 'auth'*/], function () {
 Route::group(['prefix' => '/jobs'/*, 'middleware' => 'auth'*/], function () {
     Route::get('/', [JobController::class, 'index'])->name('jobs.index');
     Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
+    Route::get('/store', [JobController::class, 'store'])->name('jobs.store');
 });
 
 Route::group(['prefix' => '/expensecategories'/*, 'middleware' => 'auth'*/], function () {
-    Route::get('/', [ExpenseCategoryController::class, 'index'])->name('expenses.index');
-    Route::get('/create', [ExpenseCategoryController::class, 'create'])->name('expenses.create');
+    Route::get('/', [ExpenseCategoryController::class, 'index'])->name('expensecategories.index');
+    Route::get('/create', [ExpenseCategoryController::class, 'create'])->name('expensecategories.create');
+    Route::get('/store', [ExpenseCategoryController::class, 'store'])->name('expensecategories.store');
 });
 
 Route::group(['prefix' => '/employees'/*, 'middleware' => 'auth'*/], function () {
     Route::get('/', [EmployeeController::class, 'index'])->name('employees.index');
     Route::get('/create', [EmployeeController::class, 'create'])->name('employees.create');
+    Route::get('/store', [EmployeeController::class, 'store'])->name('employees.store');
 });
 
 Route::group(['prefix' => '/expenses'/*, 'middleware' => 'auth'*/], function () {
