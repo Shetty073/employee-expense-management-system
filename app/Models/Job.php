@@ -12,6 +12,10 @@ class Job extends Model
     protected $fillable = [
         'name',
         'number',
-        'company',
     ];
+
+    public function vouchers()
+    {
+        return $this->belongsToMany(Voucher::class, 'voucher_job');
+    }
 }

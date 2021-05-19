@@ -7,13 +7,46 @@
 @stop
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+    <p>List of all expense categories is visible here.</p>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($expensecategories as $expensecategory)
+                <tr>
+                    <td>{{ $expensecategory->name }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                ACTIONS
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item text-primary" href="{{ route('expensecategories.edit', ['id' => $expensecategory->id]) }}">Edit</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="{{ route('expensecategories.destroy', ['id' => $expensecategory->id]) }}">Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
 @stop
 
-@section('css')
+{{-- @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
 @stop
 
 @section('js')
     <script> console.log('Hi!'); </script>
-@stop
+@stop --}}

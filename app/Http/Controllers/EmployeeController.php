@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -13,7 +15,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return view('employees.index');
+        $employees = Employee::all();
+
+        return view('employees.index', compact('employees'));
     }
 
     /**
@@ -34,7 +38,38 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->flashExcept(['password', 'password_confirmation', 'photo']);
+
+        $this->validate($request, [
+            'name' => 'required',
+            'code' => 'required',
+            'number' => 'required',
+            'email' => 'required|unique:employees,email,except,id',
+            'password' => 'required|confirmed',
+            'wallet_balance' => 'required',
+        ]);
+
+        $employee = Employee::create([
+            'code' => $request->input('code'),
+            'name' => $request->input('name'),
+            'number' => $request->input('number'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'wallet_balance' => $request->input('wallet_balance'),
+        ]);
+
+        if ($request->hasFile('photo')) {
+            // Save the photo file
+            $fileName = $request->file('photo')->getClientOriginalName();
+            $fileExtension = $request->file('photo')->getClientOriginalExtension();
+            $fileName = chop($fileName, '.' . $fileExtension);
+            $fileNameToStore = $fileName . '_' . $employee->id . '_' . time() . '.' . $fileExtension;
+            $path = $request->file('photo')->storeAs('public/employee', $fileNameToStore);
+            $employee->photo = $fileNameToStore;
+            $employee->save();
+        }
+
+        return redirect(route('employees.index'));
     }
 
     /**
@@ -56,7 +91,9 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employee = Employee::findorfail($id);
+
+        return view('employees.edit', compact('employee'));
     }
 
     /**
@@ -68,7 +105,45 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'code' => 'required',
+            'number' => 'required',
+            'email' => 'required',
+            'wallet_balance' => 'required',
+        ]);
+
+        $employee = Employee::findorfail($id);
+
+        $employee->update([
+            'code' => $request->input('code'),
+            'name' => $request->input('name'),
+            'number' => $request->input('number'),
+            'email' => $request->input('email'),
+            'wallet_balance' => $request->input('wallet_balance'),
+        ]);
+
+        if($request->input('password') != null) {
+            $this->validate($request, [
+                'password' => 'required|confirmed',
+            ]);
+            $employee->update([
+                'password' => Hash::make($request->input('password')),
+            ]);
+        }
+
+        if ($request->hasFile('photo')) {
+            // Save the photo file
+            $fileName = $request->file('photo')->getClientOriginalName();
+            $fileExtension = $request->file('photo')->getClientOriginalExtension();
+            $fileName = chop($fileName, $fileExtension);
+            $fileNameToStore = $fileName . '_' . $employee->id . '_' . time() . '.' . $fileExtension;
+            $path = $request->file('photo')->storeAs('public/employee', $fileNameToStore);
+            $employee->photo = $fileNameToStore;
+            $employee->save();
+        }
+
+        return redirect(route('employees.index'));
     }
 
     /**
@@ -79,6 +154,9 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employee = Employee::findorfail($id);
+        $employee->delete();
+
+        return redirect(route('employees.index'));
     }
 }

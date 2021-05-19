@@ -21,11 +21,6 @@
         <input type="number" class="form-control" id="number" name="number"
         value="@if(isset($job)){{ $job->number }}@else{{ old('number') }}@endif" required>
     </div>
-    <div class="form-group col-sm-4">
-        <label for="company">Job Company</label>
-        <input type="text" class="form-control" id="company" name="company"
-        value="@if(isset($job)){{ $job->company }}@else{{ old('company') }}@endif" required>
-    </div>
 </div>
 
 <div class="form-group">

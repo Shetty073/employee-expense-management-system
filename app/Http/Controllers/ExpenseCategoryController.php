@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
 
 class ExpenseCategoryController extends Controller
@@ -13,7 +14,9 @@ class ExpenseCategoryController extends Controller
      */
     public function index()
     {
-        return view('expensecategories.index');
+        $expensecategories = ExpenseCategory::all();
+
+        return view('expensecategories.index', compact('expensecategories'));
     }
 
     /**
@@ -34,18 +37,17 @@ class ExpenseCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->flash();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+
+        ExpenseCategory::create([
+            'name' => $request->input('name')
+        ]);
+
+        return redirect(route('expensecategories.index'));
     }
 
     /**
@@ -56,7 +58,9 @@ class ExpenseCategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $expensecategory = ExpenseCategory::findorfail($id);
+
+        return view('expensecategories.edit', compact('expensecategory'));
     }
 
     /**
@@ -68,7 +72,17 @@ class ExpenseCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+
+        $expensecategory = ExpenseCategory::findorfail($id);
+
+        $expensecategory->update([
+            'name' => $request->input('name')
+        ]);
+
+        return redirect(route('expensecategories.index'));
     }
 
     /**
@@ -79,6 +93,9 @@ class ExpenseCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $expensecategory = ExpenseCategory::findorfail($id);
+        $expensecategory->delete();
+
+        return redirect(route('expensecategories.index'));
     }
 }

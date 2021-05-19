@@ -16,15 +16,11 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('code');
             $table->integer('number');
             $table->string('email');
-            $table->string('address');
-            $table->string('bank_details');
-            $table->string('aadhar_card');
-            $table->string('pan_card');
-            $table->string('resume');
             $table->string('password');
-            $table->string('photo');
+            $table->string('photo')->nullable();
             $table->decimal('wallet_balance');
             $table->timestamps();
         });

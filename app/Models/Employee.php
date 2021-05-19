@@ -11,13 +11,9 @@ class Employee extends Model
 
     protected $fillable = [
         'name',
+        'code',
         'number',
         'email',
-        'address',
-        'bank_details',
-        'aadhar_card',
-        'pan_card',
-        'resume',
         'password',
         'photo',
         'wallet_balance'
@@ -26,4 +22,14 @@ class Employee extends Model
     protected $casts = [
         'wallet_balance' => 'double',
     ];
+
+    public function vouchers()
+    {
+        return $this->hasMany(Voucher::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

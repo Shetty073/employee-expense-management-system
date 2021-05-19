@@ -242,12 +242,12 @@ return [
             'icon'        => 'fas fa-fw fa-users',
             'label_color' => 'success',
         ],
-        [
-            'text'        => 'Expenses',
-            'url'         => '/expenses',
-            'icon'        => 'fas fa-fw fa-file-invoice-dollar',
-            'label_color' => 'success',
-        ],
+        // [
+        //     'text'        => 'Expenses',
+        //     'url'         => '/expenses',
+        //     'icon'        => 'fas fa-fw fa-file-invoice-dollar',
+        //     'label_color' => 'success',
+        // ],
         [
             'text'        => 'Jobs',
             'url'         => '/jobs',

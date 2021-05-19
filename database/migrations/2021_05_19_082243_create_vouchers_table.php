@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJobsTable extends Migration
+class CreateVouchersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateJobsTable extends Migration
      */
     public function up()
     {
-        Schema::create('jobs', function (Blueprint $table) {
+        Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('number');
+            $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('CASCADE');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateJobsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('vouchers');
     }
 }

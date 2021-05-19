@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
 use Illuminate\Http\Request;
 
-class JobController extends Controller
+class VoucherController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +13,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::all();
-
-        return view('jobs.index', compact('jobs'));
+        //
     }
 
     /**
@@ -26,7 +23,7 @@ class JobController extends Controller
      */
     public function create()
     {
-        return view('jobs.create');
+        //
     }
 
     /**
@@ -37,19 +34,18 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
-        $request->flash();
+        //
+    }
 
-        $this->validate($request, [
-            'name' => 'required',
-            'number' => 'required',
-        ]);
-
-        Job::create([
-            'name' => $request->input('name'),
-            'number' => $request->input('number'),
-        ]);
-
-        return redirect(route('jobs.index'));
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
     }
 
     /**
@@ -60,9 +56,7 @@ class JobController extends Controller
      */
     public function edit($id)
     {
-        $job = Job::findorfail($id);
-
-        return view('jobs.edit', compact('job'));
+        //
     }
 
     /**
@@ -74,18 +68,7 @@ class JobController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'number' => 'required',
-        ]);
-
-        $job = Job::findorfail($id);
-        $job->update([
-            'name' => $request->input('name'),
-            'number' => $request->input('number'),
-        ]);
-
-        return redirect(route('jobs.index'));
+        //
     }
 
     /**
@@ -96,9 +79,6 @@ class JobController extends Controller
      */
     public function destroy($id)
     {
-        $job = Job::findorfail($id);
-        $job->delete();
-
-        return redirect(route('jobs.index'));
+        //
     }
 }
