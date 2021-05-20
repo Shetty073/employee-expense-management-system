@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -69,6 +70,14 @@ class EmployeeController extends Controller
             $employee->save();
         }
 
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+        ]);
+        $user->employee()->save($employee);
+        $user->save();
+
         return redirect(route('employees.index'));
     }
 
@@ -123,15 +132,6 @@ class EmployeeController extends Controller
             'wallet_balance' => $request->input('wallet_balance'),
         ]);
 
-        if($request->input('password') != null) {
-            $this->validate($request, [
-                'password' => 'required|confirmed',
-            ]);
-            $employee->update([
-                'password' => Hash::make($request->input('password')),
-            ]);
-        }
-
         if ($request->hasFile('photo')) {
             // Save the photo file
             $fileName = $request->file('photo')->getClientOriginalName();
@@ -141,6 +141,29 @@ class EmployeeController extends Controller
             $path = $request->file('photo')->storeAs('public/employee', $fileNameToStore);
             $employee->photo = $fileNameToStore;
             $employee->save();
+        }
+
+        $user = $employee->user;
+
+        $user->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+        ]);
+        $user->employee()->save($employee);
+        $user->save();
+
+        if($request->input('password') != null) {
+            $this->validate($request, [
+                'password' => 'required|confirmed',
+            ]);
+
+            $employee->update([
+                'password' => Hash::make($request->input('password')),
+            ]);
+
+            $user->update([
+                'password' => Hash::make($request->input('password')),
+            ]);
         }
 
         return redirect(route('employees.index'));
@@ -155,6 +178,13 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         $employee = Employee::findorfail($id);
+
+        if ($employee->photo !== null) {
+            // Delete old photo file
+            $file_path = public_path('storage/employee/' . $employee->photo);
+            @unlink($file_path);
+        }
+
         $employee->delete();
 
         return redirect(route('employees.index'));

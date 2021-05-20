@@ -187,12 +187,12 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
-    'logout_url' => 'logout',
-    'login_url' => 'login',
-    'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
-    'password_email_url' => 'password/email',
+    'dashboard_url' => 'dashboard/index',
+    'logout_url' => 'auth/logout',
+    'login_url' => 'auth/login',
+    'register_url' => false,
+    'password_reset_url' => false,
+    'password_email_url' => false,
     'profile_url' => false,
 
     /*
@@ -234,33 +234,44 @@ return [
             'url'         => '/',
             'icon'        => 'fas fa-fw fa-tachometer-alt',
             // 'label'       => 4,
-            'label_color' => 'success',
+            // 'label_color' => 'success',
         ],
+        // Admin links
         [
             'text'        => 'Employees',
             'url'         => '/employees',
             'icon'        => 'fas fa-fw fa-users',
-            'label_color' => 'success',
+            'can'         => 'admin',
         ],
-        // [
-        //     'text'        => 'Expenses',
-        //     'url'         => '/expenses',
-        //     'icon'        => 'fas fa-fw fa-file-invoice-dollar',
-        //     'label_color' => 'success',
-        // ],
         [
             'text'        => 'Jobs',
             'url'         => '/jobs',
             'icon'        => 'fas fa-fw fa-briefcase',
-            'label_color' => 'success',
+            'can'         => 'admin',
         ],
         [
             'text'        => 'Expense Categories',
             'url'         => '/expensecategories',
             'icon'        => 'fas fa-fw fa-file-invoice',
-            'label_color' => 'success',
+            'can'         => 'admin',
         ],
-        ['header' => 'Settings'],
+        [
+            'text'        => 'Admin Users',
+            'url'         => '/auth/index',
+            'icon'        => 'fas fa-fw fa-users-cog',
+            'can'         => 'admin',
+        ],
+        // Employee links
+        [
+            'text'        => 'Vouchers',
+            'url'         => '/vouchers',
+            'icon'        => 'fas fa-fw fa-users-cog',
+            'can'         => 'employee',
+        ],
+        [
+            'header' => 'Settings',
+            'can' => 'admin',
+        ],
         // [
         //     'text' => 'profile',
         //     'url'  => '/settings',
@@ -285,7 +296,13 @@ return [
                     'url'  => '/employees/create',
                     'icon'    => 'fas fa-fw fa-users',
                 ],
+                [
+                    'text' => 'Create Admin Users',
+                    'url'  => '/auth/register',
+                    'icon'    => 'fas fa-fw fa-users-cog',
+                ],
             ],
+            'can'         => 'admin',
         ],
         // ['header' => 'labels'],
         // [

@@ -22,6 +22,7 @@ class CreateEmployeesTable extends Migration
             $table->string('password');
             $table->string('photo')->nullable();
             $table->decimal('wallet_balance');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('CASCADE');
             $table->timestamps();
         });
     }

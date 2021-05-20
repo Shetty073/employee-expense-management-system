@@ -12,4 +12,9 @@ class ExpenseCategory extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function expenses()
+    {
+        $this->hasMany(Expense::class);
+    }
 }

@@ -9,6 +9,11 @@ class Voucher extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'date',
+        'status',
+    ];
+
     public function expenses()
     {
         return $this->hasMany(Expense::class);

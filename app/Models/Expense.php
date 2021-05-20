@@ -26,4 +26,9 @@ class Expense extends Model
     {
         return $this->belongsTo(Voucher::class);
     }
+
+    public function expensecategory()
+    {
+        return $this->belongsTo(ExpenseCategory::class, 'category_id');
+    }
 }
