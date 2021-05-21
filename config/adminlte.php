@@ -244,6 +244,24 @@ return [
             'can'         => 'admin',
         ],
         [
+            'text'        => 'Approval Requests',
+            'url'         => '/employees/vouchers',
+            'icon'        => 'fas fa-fw fa-list',
+            'can'         => 'admin',
+        ],
+        [
+            'text'        => 'Approved Vouchers',
+            'url'         => '/employees/vouchers/approved',
+            'icon'        => 'fas fa-fw fa-check-circle',
+            'can'         => 'admin',
+        ],
+        [
+            'text'        => 'Rejected Vouchers',
+            'url'         => '/employees/vouchers/rejected',
+            'icon'        => 'fas fa-fw fa-times-circle',
+            'can'         => 'admin',
+        ],
+        [
             'text'        => 'Jobs',
             'url'         => '/jobs',
             'icon'        => 'fas fa-fw fa-briefcase',
@@ -266,6 +284,12 @@ return [
             'text'        => 'Vouchers',
             'url'         => '/vouchers',
             'icon'        => 'fas fa-fw fa-users-cog',
+            'can'         => 'employee',
+        ],
+        [
+            'text'        => 'Wallet',
+            'url'         => '/wallet',
+            'icon'        => 'fas fa-fw fa-rupee-sign',
             'can'         => 'employee',
         ],
         [
@@ -403,11 +427,11 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
                 ],
             ],

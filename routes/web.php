@@ -39,6 +39,7 @@ Route::group(['prefix' => '/auth'], function () {
 
 Route::group(['prefix' => '/', 'middleware' => 'auth'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/wallet', [EmployeeController::class, 'wallet'])->name('employee.wallet');
 });
 
 Route::group(['prefix' => '/jobs', 'middleware' => ['auth', 'can:admin']], function () {
@@ -72,6 +73,12 @@ Route::group(['prefix' => '/employees', 'middleware' => ['auth', 'can:admin']], 
     Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('employees.update');
 
     Route::get('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+
+    Route::get('/vouchers', [VoucherController::class, 'approvalRequests'])->name('employees.approvalRequests');
+    Route::get('/vouchers/approved', [VoucherController::class, 'approvedVouchers'])->name('employees.approvedVouchers');
+    Route::get('/vouchers/rejected', [VoucherController::class, 'rejectedVouchers'])->name('employees.rejectedVouchers');
+    Route::get('/vouchers/details/{id}', [VoucherController::class, 'voucherDetails'])->name('employees.voucherDetails');
+    Route::get('/vouchers/approvereject', [VoucherController::class, 'voucherApproveReject'])->name('vouchers.voucherApproveReject');
 });
 
 Route::group(['prefix' => '/vouchers', 'middleware' => ['auth', 'can:employee']], function () {

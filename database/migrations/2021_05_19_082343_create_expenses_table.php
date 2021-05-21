@@ -18,7 +18,7 @@ class CreateExpensesTable extends Migration
             $table->date('date');
             $table->foreignId('category_id')->nullable()->constrained('expense_categories')->onDelete('restrict');
             $table->string('description');
-            $table->string('bill');
+            $table->string('bill')->nullable();
             $table->decimal('amount');
             $table->foreignId('voucher_id')->nullable()->constrained('vouchers')->onDelete('CASCADE');
             $table->timestamps();

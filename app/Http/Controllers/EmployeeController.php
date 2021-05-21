@@ -169,6 +169,13 @@ class EmployeeController extends Controller
         return redirect(route('employees.index'));
     }
 
+    public function wallet()
+    {
+
+
+        return view('wallet.index');
+    }
+
     /**
      * Remove the specified resource from storage.
      *

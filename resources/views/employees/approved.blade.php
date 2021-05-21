@@ -1,20 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Vouchers')
+@section('title', 'List Of Approved Vouchers')
 
 @section('content_header')
-    <h1>Vouchers</h1>
+    <h1>List Of Approved Vouchers</h1>
 @stop
 
 @section('content')
-
-    <p class="float-left">List of all of your vouchers is visible here.</p>
-    <div class="float-right">
-        <a href="{{ route('vouchers.create') }}" class="btn btn-primary">+ Create New Voucher</a>
-    </div>
-
-    <br><br><br>
-
     <div class="card px-3 py-1">
 
         <div class="table-responsive">
@@ -44,17 +36,7 @@
                             </span>
                         </td>
                         <td>
-                            <div class="dropdown">
-                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    ACTIONS
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item text-primary" href="{{ route('vouchers.edit', ['id' => $voucher->id]) }}">Edit</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="{{ route('vouchers.destroy', ['id' => $voucher->id]) }}">Delete</a>
-                                </div>
-                            </div>
+                            <a class="dropdown-item text-primary" href="{{ route('employees.voucherDetails', ['id' => $voucher->id]) }}">View</a>
                         </td>
                     </tr>
                     @endforeach
@@ -63,6 +45,7 @@
         </div>
 
     </div>
+
 @stop
 
 {{-- @section('css')
