@@ -1,27 +1,24 @@
 @extends('adminlte::page')
 
-@section('title', 'Vouchers')
+@section('title', 'Payments')
 
 @section('content_header')
-    <h1>Vouchers</h1>
+    <h1>Payments</h1>
 @stop
 
 @section('content')
-    <p>Your wallet details are visible here.</p>
+
+    <p class="float-left">List of all payments is visible here.</p>
+
+    <br><br><br>
 
     <div class="card px-3 py-1">
-        <h2>Your total wallet banalce is:
-            <span class="badge badge-primary px-2 py-2">
-                ₹ {{ auth()->user()->employee->wallet_balance }}
-            </span>
-        </h2>
-
-        <br>
 
         <div class="table-responsive">
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
+                        <th scope="col">Employee Name</th>
                         <th scope="col">Total Amount</th>
                         <th scope="col">Payment Mode</th>
                         <th scope="col">Date</th>
@@ -31,6 +28,7 @@
                 <tbody>
                     @foreach ($payments as $payment)
                     <tr>
+                        <td style="font-weight: 700;">{{ $payment->employee()->first()->name }}</td>
                         <td>
                             <span class="badge badge-primary px-2 py-2" style="font-size: 1rem;">
                                 ₹ {{ $payment->amount }}

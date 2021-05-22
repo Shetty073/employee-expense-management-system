@@ -13,7 +13,7 @@
 
         <div class="table-responsive">
             <table class="table">
-                <thead>
+                <thead class="thead-dark">
                     <tr>
                         <th scope="col">Job Name</th>
                         <th scope="col">Job Number</th>

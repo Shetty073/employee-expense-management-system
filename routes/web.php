@@ -7,6 +7,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,13 +73,16 @@ Route::group(['prefix' => '/employees', 'middleware' => ['auth', 'can:admin']], 
     Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employees.edit');
     Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('employees.update');
 
+    Route::get('/addbalance/{id}', [EmployeeController::class, 'addbalance'])->name('employees.addbalance');
+    Route::post('/addbalance/{id}', [EmployeeController::class, 'addbalance'])->name('employees.addbalance');
+
     Route::get('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
     Route::get('/vouchers', [VoucherController::class, 'approvalRequests'])->name('employees.approvalRequests');
     Route::get('/vouchers/approved', [VoucherController::class, 'approvedVouchers'])->name('employees.approvedVouchers');
     Route::get('/vouchers/rejected', [VoucherController::class, 'rejectedVouchers'])->name('employees.rejectedVouchers');
     Route::get('/vouchers/details/{id}', [VoucherController::class, 'voucherDetails'])->name('employees.voucherDetails');
-    Route::get('/vouchers/approvereject', [VoucherController::class, 'voucherApproveReject'])->name('vouchers.voucherApproveReject');
+    Route::post('/vouchers/approvereject', [VoucherController::class, 'voucherApproveReject'])->name('vouchers.voucherApproveReject');
 });
 
 Route::group(['prefix' => '/vouchers', 'middleware' => ['auth', 'can:employee']], function () {
@@ -95,4 +99,8 @@ Route::group(['prefix' => '/vouchers', 'middleware' => ['auth', 'can:employee']]
     Route::post('/askForApproval', [VoucherController::class, 'askForApproval'])->name('vouchers.askForApproval');
 
     Route::get('/destroy/{id}', [VoucherController::class, 'destroy'])->name('vouchers.destroy');
+});
+
+Route::group(['prefix' => '/payments', 'middleware' => ['auth', 'can:admin']], function () {
+    Route::get('/', [PaymentController::class, 'index'])->name('payments.index');
 });

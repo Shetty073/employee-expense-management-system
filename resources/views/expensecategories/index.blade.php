@@ -13,7 +13,7 @@
 
         <div class="table-responsive">
             <table class="table">
-                <thead>
+                <thead class="thead-dark">
                     <tr>
                         <th scope="col">Category Name</th>
                         <th scope="col">Actions</th>

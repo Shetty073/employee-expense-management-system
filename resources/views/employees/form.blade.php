@@ -44,13 +44,38 @@
     </div>
 </div>
 
+@if(!isset($employee))
+    <div class="row">
+        <div class="form-group col-sm-4">
+            <label for="wallet_balance">Employee Wallet Balance</label>
+            <input type="number" class="form-control" id="wallet_balance" name="wallet_balance"
+            value="0" required>
+        </div>
+        <div class="col-sm-4" id="paymentModeDiv" hidden>
+            <label for="paymentModes">Payment Mode:</label>
+            <select class="form-control" id="paymentModes" name="payment_mode">
+                <option value="0">{{ App\Accunity\Utils::PAYMENT_MODES[0] }}</option>
+                <option value="1">{{ App\Accunity\Utils::PAYMENT_MODES[1] }}</option>
+                <option value="2">{{ App\Accunity\Utils::PAYMENT_MODES[2] }}</option>
+                <option value="3">{{ App\Accunity\Utils::PAYMENT_MODES[3] }}</option>
+            </select>
+        </div>
+        <div class="form-group col-sm-4" id="dateDiv" hidden>
+            <label for="date">Date</label>
+            <input type="date" class="form-control" id="date" name="date"
+            value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
+        </div>
+    </div>
+    <div class="row" id="remarkDiv" hidden>
+        <div class="form-group col-sm-4">
+            <label for="remark">Remark</label>
+            <input type="text" class="form-control" id="remark" name="remark" required>
+        </div>
+    </div>
+@endif
+
 <div class="row">
     <div class="form-group col-sm-4">
-        <label for="wallet_balance">Employee Wallet Balance</label>
-        <input type="number" class="form-control" id="wallet_balance" name="wallet_balance"
-        value="@if(isset($employee)){{ $employee->wallet_balance }}@else{{ old('wallet_balance') }}@endif" required>
-    </div>
-    <div class="form-group col-sm-3">
         <label for="photo">Employee's Photo</label>
         <input type="file" class="form-control" id="photo" name="photo">
     </div>

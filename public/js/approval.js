@@ -35,39 +35,76 @@ $(document).on('click', '#applyForApprovalBtn', function () {
     let csrft = $('meta[name="csrf-token"]').attr('content');
     let url = $('#url').val();
 
-    fetch(
-        url,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-Token': csrft,
-            },
-            body: JSON.stringify({
-                'voucher_id': voucherId,
-            }),
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger mr-2',
         },
-    ).then(function (response) {
-        if(response.status === 200) {
-            return response.json();
-        } else {
-            return {
-                'process' : 'failed',
-            };
-        }
-        // window.location.reload();
-    }).then(function (response) {
-        if(response.process === 'success') {
-            Swal.fire(
-                'Successfully applied for approval!',
-                '',
-                'Success'
-            );
-            // request succeeded
-            window.location.reload();
-        } else {
-            // request failed
+        buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, apply!',
+        cancelButtonText: 'Cancel!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // perform fetch API call here
+            fetch(
+                url,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-Token': csrft,
+                    },
+                    body: JSON.stringify({
+                        'voucher_id': voucherId,
+                    }),
+                },
+            ).then(function (response) {
+                if(response.status === 200) {
+                    return response.json();
+                } else {
+                    return {
+                        'process' : 'failed',
+                    };
+                }
+                // window.location.reload();
+            }).then(function (response) {
+                if(response.process === 'success') {
+                    // request succeeded
+                    swalWithBootstrapButtons.fire(
+                        'Requested for approval!',
+                        'This voucher is now waiting for approval from admin.',
+                        'success'
+                    ).then(function (result) {
+                        window.location.reload();
+                    })
+                } else {
+                    // request failed
+                    swalWithBootstrapButtons.fire(
+                        'Failed!',
+                        'Request was not unsuccessful! Please contact the system administrator.',
+                        'error'
+                    )
+                }
+            });
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'You can request for approval again at any time.',
+                'error'
+            )
         }
     });
 });

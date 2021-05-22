@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -59,6 +60,22 @@ class EmployeeController extends Controller
             'wallet_balance' => $request->input('wallet_balance'),
         ]);
 
+        if($request->input('wallet_balance') > 0) {
+            $payment = Payment::create([
+                'date' => $request->input('date'),
+                'payment_mode' => $request->input('payment_mode'),
+                'amount' => $request->input('wallet_balance'),
+            ]);
+
+            if ($request->input('remark') == null) {
+                $payment->remark = 'Balance Added';
+            } else {
+                $payment->remark = 'Balance Added - ' . $request->input('remark');
+            }
+            $payment->employee()->associate($employee);
+            $payment->save();
+        }
+
         if ($request->hasFile('photo')) {
             // Save the photo file
             $fileName = $request->file('photo')->getClientOriginalName();
@@ -81,15 +98,40 @@ class EmployeeController extends Controller
         return redirect(route('employees.index'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function addbalance(Request $request, $id)
     {
-        //
+        if($request->isMethod('post'))
+        {
+            $this->validate($request, [
+                'wallet_balance' => 'required',
+            ]);
+
+            // add balance to employee's account
+            $employee = Employee::findorfail($id);
+            $wallet_balance = $employee->wallet_balance + $request->input('wallet_balance');
+            $employee->wallet_balance = $wallet_balance;
+            $employee->save();
+
+            $payment = Payment::create([
+                'date' => $request->input('date'),
+                'payment_mode' => $request->input('payment_mode'),
+                'amount' => $request->input('wallet_balance'),
+            ]);
+
+            if ($request->input('remark') == null) {
+                $payment->remark = 'Balance Added';
+            } else {
+                $payment->remark = 'Balance Added - ' . $request->input('remark');
+            }
+            $payment->employee()->associate($employee);
+            $payment->save();
+
+            return redirect(route('employees.index'));
+        }
+
+        $employee = Employee::findorfail($id);
+
+        return view('employees.addbalance', compact('employee'));
     }
 
     /**
@@ -171,9 +213,9 @@ class EmployeeController extends Controller
 
     public function wallet()
     {
+        $payments = auth()->user()->employee->payments;
 
-
-        return view('wallet.index');
+        return view('wallet.index', compact('payments'));
     }
 
     /**
@@ -191,6 +233,8 @@ class EmployeeController extends Controller
             $file_path = public_path('storage/employee/' . $employee->photo);
             @unlink($file_path);
         }
+
+        $employee->user()->first()->delete();
 
         $employee->delete();
 

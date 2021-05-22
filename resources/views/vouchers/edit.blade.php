@@ -26,7 +26,7 @@
         <div class="row">
             <div class="form-group col-sm-4">
                 <label for="job">Select Job</label>
-                <select class="custom-select" id="job" name="job[]" multiple>
+                <select class="form-control js-example-basic-multiple" id="job" name="job[]" multiple="multiple">
                     <?php
                         $vouchers = $voucher->jobs()->get();
                         $voucherids = array();
@@ -41,7 +41,9 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-group col-sm-4">
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-3">
                 <label for="voucherdate">Voucher Date</label>
                 <input type="date" class="form-control" id="voucherdate" name="voucherdate" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}"
                 value="@if(isset($voucher)){{ $voucher->voucherdate }}@else{{ old('voucherdate') }}@endif" required>
@@ -103,7 +105,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" class="btn btn-success" value="Save">
+                <input type="submit" class="btn btn-success" value="+ Add">
             </div>
         </form>
     @endif
@@ -161,7 +163,7 @@
 
     <div class="table-responsive">
         <table class="table">
-            <thead>
+            <thead class="thead-dark">
                 <tr>
                     <th scope="col">Date</th>
                     <th scope="col">Category</th>
@@ -180,7 +182,7 @@
                         <td class="data">{{ $expense->description }}</td>
                         <td>{{ $expense->bill }}</td>
                         <td class="data">
-                            <span class="badge badge-primary">₹ {{ $expense->amount }}</span>
+                            <span class="badge badge-primary px-2 py-2">₹ {{ $expense->amount }}</span>
                         </td>
                     </tr>
                 @endforeach
@@ -205,4 +207,5 @@
 
 @section('js')
     <script src="{{ asset('js/approval.js') }}"></script>
+    <script src="{{ asset('js/s2.js') }}"></script>
 @stop

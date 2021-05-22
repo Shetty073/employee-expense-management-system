@@ -13,7 +13,7 @@
 
         <div class="table-responsive">
             <table class="table">
-                <thead>
+                <thead class="thead-dark">
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Code</th>
@@ -32,9 +32,16 @@
                         <td>{{ $employee->email }}</td>
                         <td>{{ $employee->number }}</td>
                         <td>
-                            <img width="50" height="60" src="{{ asset('storage/employee/' . $employee->photo) }}" class="img-thumbnail" alt="Employee photo"/>
+                            <span>
+                                <img width="50" height="60" src="{{ asset('storage/employee/' . $employee->photo) }}"
+                                class="img-thumbnail" alt="Employee photo"/>
+                            </span>
                         </td>
-                        <td>{{ $employee->wallet_balance }}</td>
+                        <td>
+                            <span class="badge badge-primary px-2 py-2" style="font-size: 1.2rem;">
+                                ₹ {{ $employee->wallet_balance }}
+                            </span>
+                        </td>
                         <td>
                             <div class="dropdown">
                                 <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -43,6 +50,7 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item text-primary" href="{{ route('employees.addbalance', ['id' => $employee->id]) }}">Add Balance</a>
                                     <a class="dropdown-item text-primary" href="{{ route('employees.edit', ['id' => $employee->id]) }}">Edit</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item text-danger" href="{{ route('employees.destroy', ['id' => $employee->id]) }}">Delete</a>

@@ -18,7 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->date('date');
             $table->integer('payment_mode');
             $table->decimal('amount');
-            $table->string('remark');
+            $table->string('remark')->nullable();
             $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('CASCADE');
             $table->timestamps();
         });

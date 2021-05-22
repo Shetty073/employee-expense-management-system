@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\Job;
+use App\Models\Payment;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 
@@ -41,10 +42,52 @@ class VoucherController extends Controller
         return view('employees.details', compact('voucher', 'expenseCategories', 'jobs', 'expenses'));
     }
 
-    public function voucherApproveReject()
+    public function voucherApproveReject(Request $request)
     {
         // this will respond to fetch API request and based on data
         // it will set the status of voucher to 2 (approved) or 3 (rejected)
+        $voucherId = json_decode($request->getContent(), true)['voucher_id'];
+        $status = json_decode($request->getContent(), true)['status'];
+
+        $voucher = Voucher::findorfail($voucherId);
+        $voucher->update([
+            'status' => $status,
+        ]);
+
+        $employee = $voucher->employee()->first();
+
+        if($status == 2)
+        {
+            $date = json_decode($request->getContent(), true)['date'];
+            $payment_mode = json_decode($request->getContent(), true)['payment_mode'];
+            $amount = json_decode($request->getContent(), true)['amount'];
+            $remark = json_decode($request->getContent(), true)['remark'];
+
+            // voucher is approved, reflect this in employee's wallet balance
+            $wallet_balance = $employee->wallet_balance;
+            $wallet_balance = $wallet_balance - floatval($amount);
+            $employee->wallet_balance = $wallet_balance;
+            $employee->save();
+
+            $payment = Payment::create([
+                'date' => $date,
+                'payment_mode' => $payment_mode,
+                'amount' => $amount,
+            ]);
+
+            if ($request->input('remark') == null) {
+                $payment->remark = 'Voucher Accepted';
+            } else {
+                $payment->remark = 'Voucher Accepted - ' . $remark;
+            }
+
+            $payment->employee()->associate($employee);
+            $payment->save();
+        }
+
+        return response()->json([
+            'process' => 'success',
+        ]);
     }
 
     /**

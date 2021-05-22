@@ -19,7 +19,7 @@
 
         <div class="table-responsive">
             <table class="table">
-                <thead>
+                <thead class="thead-dark">
                     <tr>
                         <th scope="col">Date</th>
                         <th scope="col">Total Amount</th>
@@ -39,7 +39,7 @@
                     <tr>
                         <td>{{ $voucher->date }}</td>
                         <td>
-                            <span class="badge badge-primary">
+                            <span class="badge badge-primary px-2 py-2">
                                 ₹ {{ $total_amt }}
                             </span>
                         </td>
