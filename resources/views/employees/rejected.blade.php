@@ -38,7 +38,7 @@
                             </span>
                         </td>
                         <td>
-                            <a class="dropdown-item text-primary" href="{{ route('employees.voucherDetails', ['id' => $voucher->id]) }}">View</a>
+                            <a class="btn btn-primary" href="{{ route('employees.voucherDetails', ['id' => $voucher->id]) }}">View</a>
                         </td>
                     </tr>
                     @endforeach

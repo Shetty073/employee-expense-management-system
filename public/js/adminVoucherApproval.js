@@ -1,3 +1,21 @@
+// download all bills at once
+$(document).on('click', '#downloadAllBillsBtn', function () {
+    window.open('mysite.com/file1');
+    window.open('mysite.com/file2');
+    window.open('mysite.com/file3');
+});
+
+// total amount logic
+$(document).on('input', '.expenseamount', function () {
+    let total = 0;
+    $('.expenseamount').each(function () {
+        total += parseFloat($(this).val());
+    });
+
+    $('#totalAmountPaid').val(total);
+});
+
+// approve this voucher
 $(document).on('click', '#approveVoucherBtn', function () {
     let voucherId = $('#voucherId').val();
     let csrft = $('meta[name="csrf-token"]').attr('content');
@@ -7,7 +25,25 @@ $(document).on('click', '#approveVoucherBtn', function () {
     let amount = $('#totalAmountPaid').val();
     let remark = $('#remark').val();
 
-    // approve this voucher
+    let expense_remarks = {};
+    let expense_amounts = {};
+
+    $('.expenseremark').each(function () {
+        let expenseRemark = $(this).val();
+        let expenseRemarkId = $(this).prop('id');
+
+        if(expenseRemark.trim() !== '') {
+            expense_remarks[expenseRemarkId] = expenseRemark;
+        }
+    });
+
+    $('.expenseamount').each(function () {
+        let expenseAmount = $(this).val();
+        let expenseAmountId = $(this).prop('id');
+        expense_amounts[expenseAmountId] = expenseAmount;
+    });
+
+
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: 'btn btn-success',
@@ -43,6 +79,8 @@ $(document).on('click', '#approveVoucherBtn', function () {
                         'payment_mode': payment_mode,
                         'amount': amount,
                         'remark': remark,
+                        'expense_remarks': expense_remarks,
+                        'expense_amounts': expense_amounts,
                     }),
                 },
             ).then(function (response) {
@@ -87,12 +125,31 @@ $(document).on('click', '#approveVoucherBtn', function () {
     });
 });
 
+// reject this voucher
 $(document).on('click', '#rejectVoucherBtn', function () {
     let voucherId = $('#voucherId').val();
     let csrft = $('meta[name="csrf-token"]').attr('content');
     let url = $('#url').val();
 
-    // reject this voucher
+    let expense_remarks = {};
+    let expense_amounts = {};
+
+    $('.expenseremark').each(function () {
+        let expenseRemark = $(this).val();
+        let expenseRemarkId = $(this).prop('id');
+
+        if(expenseRemark.trim() !== '') {
+            expense_remarks[expenseRemarkId] = expenseRemark;
+        }
+    });
+
+    $('.expenseamount').each(function () {
+        let expenseAmount = $(this).val();
+        let expenseAmountId = $(this).prop('id');
+        expense_amounts[expenseAmountId] = expenseAmount;
+    });
+
+
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: 'btn btn-success',
@@ -124,6 +181,8 @@ $(document).on('click', '#rejectVoucherBtn', function () {
                     body: JSON.stringify({
                         'voucher_id': voucherId,
                         'status': 3,
+                        'expense_remarks': expense_remarks,
+                        'expense_amounts': expense_amounts,
                     }),
                 },
             ).then(function (response) {

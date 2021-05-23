@@ -14,6 +14,7 @@ class Expense extends Model
         'description',
         'bill',
         'amount',
+        'remark',
     ];
 
     protected $casts = [

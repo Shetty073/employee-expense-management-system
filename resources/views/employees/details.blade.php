@@ -29,7 +29,7 @@
             </div>
             <div class="form-group col-sm-6">
                 <label for="voucherdate">Voucher Date</label>
-                <input type="date" class="form-control" id="voucherdate" name="voucherdate" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}"
+                <input type="date" class="form-control" id="voucherdate" name="voucherdate"
                 value="@if(isset($voucher)){{ $voucher->voucherdate }}@else{{ old('voucherdate') }}@endif" required disabled>
             </div>
         </div>
@@ -72,25 +72,32 @@
                     <th scope="col">Description</th>
                     <th scope="col">Bill</th>
                     <th scope="col">Amount</th>
+                    <th scope="col">Remark</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($expenses as $expense)
                     <tr>
-                        <td hidden class="data">{{ $expense->id }}</td>
                         <td class="data">{{ $expense->date->format('d-m-Y') }}</td>
                         <td hidden class="data">{{ $expense->category_id }}</td>
                         <td class="data">{{ App\Models\ExpenseCategory::where('id', $expense->category_id)->first()->name }}</td>
                         <td class="data">{{ $expense->description }}</td>
                         <td>
                             @if($expense->bill !== null)
-                                <a class="badge badge-secondary" href="{{ asset('storage/bill/' . $expense->bill) }}">VIEW</a>
+                            <a class="badge badge-secondary" href="{{ asset('storage/bill/' . $expense->bill) }}">VIEW</a>
                             @else
-                                <span class="badge badge-danger">Bill Not Provided</span>
+                            <span class="badge badge-danger">Bill Not Provided</span>
                             @endif
                         </td>
                         <td class="data">
-                            <span class="badge badge-primary px-2 py-2">₹ {{ $expense->amount }}</span>
+                            <span class="badge badge-primary px-2 py-2">
+                                ₹ <input type="number" class="expenseamount" id="{{ $expense->id }}" value="{{ $expense->amount }}"
+                                @if($voucher->status !== 1) disabled @endif>
+                            </span>
+                        </td>
+                        <td class="data">
+                            <input type="text" class="expenseremark" id="{{ $expense->id }}" value="{{ $expense->remark }}"
+                            @if($voucher->status !== 1) disabled @endif>
                         </td>
                     </tr>
                 @endforeach
@@ -105,7 +112,13 @@
                         <td colspan="2" style="font-weight: 800;">
                             ₹ {{ $total_amt }}
                         </td>
-                        <td colspan="2"></td>
+                        <td>
+                            <button class="btn btn-primary" id="downloadAllBillsBtn">
+                                Download All Bills
+                            </button>
+                        </td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr class="table-warning" style="font-size: 1.5rem;">
                         <td colspan="1" scope="row" style="font-weight: 800;">Wallet Balance :-</td>
@@ -113,40 +126,43 @@
                             ₹ {{ $voucher->employee()->first()->wallet_balance }}
                         </td>
                         <td colspan="2"></td>
+                        <td></td>
                     </tr>
             </tbody>
         </table>
     </div>
     <br>
 
-    <form>
-        <div class="row">
-            <div class="col-sm-4">
-                <label for="totalAmountPaid">Amount Paid:</label>
-                <input type="number" id="totalAmountPaid" class="form-control" value="{{ $total_amt }}">
+    @if($voucher->status === 1)
+        <form>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="totalAmountPaid">Amount Paid:</label>
+                    <input type="number" id="totalAmountPaid" class="form-control" value="{{ $total_amt }}">
+                </div>
+                <div class="col-sm-4">
+                    <label for="paymentMode">Payment Mode:</label>
+                    <select class="form-control" id="paymentMode">
+                        <option value="0">{{ App\Accunity\Utils::PAYMENT_MODES[0] }}</option>
+                        <option value="1">{{ App\Accunity\Utils::PAYMENT_MODES[1] }}</option>
+                        <option value="2">{{ App\Accunity\Utils::PAYMENT_MODES[2] }}</option>
+                        <option value="3">{{ App\Accunity\Utils::PAYMENT_MODES[3] }}</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-sm-4">
-                <label for="paymentMode">Payment Mode:</label>
-                <select class="form-control" id="paymentMode">
-                    <option value="0">{{ App\Accunity\Utils::PAYMENT_MODES[0] }}</option>
-                    <option value="1">{{ App\Accunity\Utils::PAYMENT_MODES[1] }}</option>
-                    <option value="2">{{ App\Accunity\Utils::PAYMENT_MODES[2] }}</option>
-                    <option value="3">{{ App\Accunity\Utils::PAYMENT_MODES[3] }}</option>
-                </select>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="date">Date</label>
+                    <input type="date" class="form-control" id="date" name="date"
+                    value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="remark">Remark</label>
+                    <input type="text" class="form-control" id="remark" name="remark" required>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-4">
-                <label for="date">Date</label>
-                <input type="date" class="form-control" id="date" name="date"
-                value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
-            </div>
-            <div class="form-group col-sm-4">
-                <label for="remark">Remark</label>
-                <input type="text" class="form-control" id="remark" name="remark" required>
-            </div>
-        </div>
-    </form>
+        </form>
+    @endif
 
     <div class="form-group mt-3 mx-auto">
         @if($voucher->status === 0)

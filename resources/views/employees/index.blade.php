@@ -38,7 +38,8 @@
                             </span>
                         </td>
                         <td>
-                            <span class="badge badge-primary px-2 py-2" style="font-size: 1.2rem;">
+                            <span
+                            class="badge @if($employee->wallet_balance > 0) badge-primary @else badge-warning @endif px-2 py-2" style="font-size: 1.2rem;">
                                 ₹ {{ $employee->wallet_balance }}
                             </span>
                         </td>

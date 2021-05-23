@@ -45,8 +45,8 @@
         <div class="row">
             <div class="form-group col-sm-3">
                 <label for="voucherdate">Voucher Date</label>
-                <input type="date" class="form-control" id="voucherdate" name="voucherdate" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}"
-                value="@if(isset($voucher)){{ $voucher->voucherdate }}@else{{ old('voucherdate') }}@endif" required>
+                <input type="date" class="form-control" id="voucherdate" name="voucherdate"
+                value="@if(isset($voucher)){{ $voucher->date }}@else{{ old('voucherdate') }}@endif" required>
             </div>
         </div>
 

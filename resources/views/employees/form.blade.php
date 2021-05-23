@@ -69,7 +69,7 @@
     <div class="row" id="remarkDiv" hidden>
         <div class="form-group col-sm-4">
             <label for="remark">Remark</label>
-            <input type="text" class="form-control" id="remark" name="remark" required>
+            <input type="text" class="form-control" id="remark" name="remark">
         </div>
     </div>
 @endif

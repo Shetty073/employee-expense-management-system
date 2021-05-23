@@ -48,6 +48,8 @@ class VoucherController extends Controller
         // it will set the status of voucher to 2 (approved) or 3 (rejected)
         $voucherId = json_decode($request->getContent(), true)['voucher_id'];
         $status = json_decode($request->getContent(), true)['status'];
+        $expense_remarks = json_decode($request->getContent(), true)['expense_remarks'];
+        $expense_amounts = json_decode($request->getContent(), true)['expense_amounts'];
 
         $voucher = Voucher::findorfail($voucherId);
         $voucher->update([
@@ -83,6 +85,26 @@ class VoucherController extends Controller
 
             $payment->employee()->associate($employee);
             $payment->save();
+        }
+
+        // update the remarks for each expense if any
+        if(count($expense_remarks) > 0) {
+            foreach ($expense_remarks as $id => $remark) {
+                $expense = Expense::where('id', $id)->first();
+                $expense->update([
+                    'remark' => $remark,
+                ]);
+            }
+        }
+
+        // update the amount for each expense in case its changed
+        if(count($expense_amounts) > 0) {
+            foreach ($expense_amounts as $id => $amount) {
+                $expense = Expense::where('id', $id)->first();
+                $expense->update([
+                    'amount' => $amount,
+                ]);
+            }
         }
 
         return response()->json([
