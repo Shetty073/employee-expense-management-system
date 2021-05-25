@@ -37,7 +37,7 @@
 
                     ?>
                     <tr>
-                        <td>{{ $voucher->date }}</td>
+                        <td>{{ $voucher->date->format('d-M-Y') }}</td>
                         <td>
                             <span class="badge badge-primary px-2 py-2">
                                 ₹ {{ $total_amt }}

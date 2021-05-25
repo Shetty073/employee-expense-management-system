@@ -40,7 +40,7 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->flashExcept(['password', 'password_confirmation', 'photo']);
+        $request->flashExcept(['password', 'password_confirmation', 'photo', 'aadhar_photo']);
 
         $this->validate($request, [
             'name' => 'required',
@@ -51,12 +51,14 @@ class EmployeeController extends Controller
             'wallet_balance' => 'required',
         ]);
 
+        // ! Note: The employee passsword is knowingly unhashed at client's request
+        // ! TODO: Change this back to hashed password for github version of project
         $employee = Employee::create([
             'code' => $request->input('code'),
             'name' => $request->input('name'),
             'number' => $request->input('number'),
             'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
+            'password' => $request->input('password'),
             'wallet_balance' => $request->input('wallet_balance'),
         ]);
 
@@ -84,6 +86,17 @@ class EmployeeController extends Controller
             $fileNameToStore = $fileName . '_' . $employee->id . '_' . time() . '.' . $fileExtension;
             $path = $request->file('photo')->storeAs('public/employee', $fileNameToStore);
             $employee->photo = $fileNameToStore;
+            $employee->save();
+        }
+
+        if ($request->hasFile('aadhar_photo')) {
+            // Save the aadhar card photo file
+            $fileName = $request->file('aadhar_photo')->getClientOriginalName();
+            $fileExtension = $request->file('aadhar_photo')->getClientOriginalExtension();
+            $fileName = chop($fileName, $fileExtension);
+            $fileNameToStore = $fileName . '_' . $employee->id . '_' . time() . '.' . $fileExtension;
+            $path = $request->file('aadhar_photo')->storeAs('public/employee', $fileNameToStore);
+            $employee->aadhar_photo = $fileNameToStore;
             $employee->save();
         }
 
@@ -161,7 +174,6 @@ class EmployeeController extends Controller
             'code' => 'required',
             'number' => 'required',
             'email' => 'required',
-            'wallet_balance' => 'required',
         ]);
 
         $employee = Employee::findorfail($id);
@@ -171,10 +183,16 @@ class EmployeeController extends Controller
             'name' => $request->input('name'),
             'number' => $request->input('number'),
             'email' => $request->input('email'),
-            'wallet_balance' => $request->input('wallet_balance'),
         ]);
 
         if ($request->hasFile('photo')) {
+            // delete the old photo
+            if ($employee->photo !== null) {
+                // Delete old photo file
+                $file_path = public_path('storage/employee/' . $employee->photo);
+                @unlink($file_path);
+            }
+
             // Save the photo file
             $fileName = $request->file('photo')->getClientOriginalName();
             $fileExtension = $request->file('photo')->getClientOriginalExtension();
@@ -182,6 +200,24 @@ class EmployeeController extends Controller
             $fileNameToStore = $fileName . '_' . $employee->id . '_' . time() . '.' . $fileExtension;
             $path = $request->file('photo')->storeAs('public/employee', $fileNameToStore);
             $employee->photo = $fileNameToStore;
+            $employee->save();
+        }
+
+        if ($request->hasFile('aadhar_photo')) {
+            // delete the old aadhar photo
+            if ($employee->aadhar_photo !== null) {
+                // Delete old photo file
+                $file_path = public_path('storage/employee/' . $employee->aadhar_photo);
+                @unlink($file_path);
+            }
+
+            // Save the aadhar card photo file
+            $fileName = $request->file('aadhar_photo')->getClientOriginalName();
+            $fileExtension = $request->file('aadhar_photo')->getClientOriginalExtension();
+            $fileName = chop($fileName, $fileExtension);
+            $fileNameToStore = $fileName . '_' . $employee->id . '_' . time() . '.' . $fileExtension;
+            $path = $request->file('aadhar_photo')->storeAs('public/employee', $fileNameToStore);
+            $employee->aadhar_photo = $fileNameToStore;
             $employee->save();
         }
 
@@ -200,7 +236,7 @@ class EmployeeController extends Controller
             ]);
 
             $employee->update([
-                'password' => Hash::make($request->input('password')),
+                'password' => $request->input('password'),
             ]);
 
             $user->update([
@@ -231,6 +267,12 @@ class EmployeeController extends Controller
         if ($employee->photo !== null) {
             // Delete old photo file
             $file_path = public_path('storage/employee/' . $employee->photo);
+            @unlink($file_path);
+        }
+
+        if ($employee->aadhar_photo !== null) {
+            // Delete old photo file
+            $file_path = public_path('storage/employee/' . $employee->aadhar_photo);
             @unlink($file_path);
         }
 

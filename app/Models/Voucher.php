@@ -11,7 +11,16 @@ class Voucher extends Model
 
     protected $fillable = [
         'date',
+        'number',
         'status',
+        'approved_amount',
+        'approval_date',
+    ];
+
+    protected $casts = [
+        'approved_amount' => 'double',
+        'approval_date' => 'date',
+        'date' => 'date',
     ];
 
     public function expenses()

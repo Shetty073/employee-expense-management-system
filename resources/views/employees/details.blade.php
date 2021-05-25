@@ -30,7 +30,7 @@
             <div class="form-group col-sm-6">
                 <label for="voucherdate">Voucher Date</label>
                 <input type="date" class="form-control" id="voucherdate" name="voucherdate"
-                value="@if(isset($voucher)){{ $voucher->voucherdate }}@else{{ old('voucherdate') }}@endif" required disabled>
+                value="@if(isset($voucher)){{ $voucher->date->format('Y-m-d') }}@else{{ old('voucherdate') }}@endif" required disabled>
             </div>
         </div>
         <div class="row">
@@ -69,37 +69,42 @@
                 <tr>
                     <th scope="col">Date</th>
                     <th scope="col">Category</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Bill</th>
                     <th scope="col">Amount</th>
+                    <th scope="col">Bill</th>
+                    <th scope="col">Description</th>
                     <th scope="col">Remark</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($expenses as $expense)
                     <tr>
-                        <td class="data">{{ $expense->date->format('d-m-Y') }}</td>
+                        <td class="data">{{ $expense->date->format('d-M-Y') }}</td>
                         <td hidden class="data">{{ $expense->category_id }}</td>
                         <td class="data">{{ App\Models\ExpenseCategory::where('id', $expense->category_id)->first()->name }}</td>
-                        <td class="data">{{ $expense->description }}</td>
-                        <td>
-                            @if($expense->bill !== null)
-                            <a class="badge badge-secondary" href="{{ asset('storage/bill/' . $expense->bill) }}">VIEW</a>
-                            @else
-                            <span class="badge badge-danger">Bill Not Provided</span>
-                            @endif
-                        </td>
                         <td class="data">
                             <span class="badge badge-primary px-2 py-2">
                                 ₹ <input type="number" class="expenseamount" id="{{ $expense->id }}" value="{{ $expense->amount }}"
                                 @if($voucher->status !== 1) disabled @endif>
                             </span>
                         </td>
+                        <td>
+                            @if(count($expense->bills) > 0)
+                                <button class="btn btn-primary downloadExpenseBillsBtn" id="{{ $expense->id }}">Download</button>
+                            @else
+                                <span class="badge badge-danger">Bill Not Provided</span>
+                            @endif
+                        </td>
+                        <td class="data">{{ $expense->description }}</td>
                         <td class="data">
                             <input type="text" class="expenseremark" id="{{ $expense->id }}" value="{{ $expense->remark }}"
                             @if($voucher->status !== 1) disabled @endif>
                         </td>
                     </tr>
+                    @foreach ($expense->bills as $bill)
+                        <span class="billurl {{ $expense->id }}" hidden>
+                            {{ asset('storage/bill/' . $bill->file_name) }}
+                        </span>
+                    @endforeach
                 @endforeach
                     <?php
                         $total_amt = 0.0;
@@ -107,8 +112,8 @@
                             $total_amt += $exp->amount;
                         }
                     ?>
-                    <tr class="table-warning" style="font-size: 1.5rem;">
-                        <td colspan="1" scope="row" style="font-weight: 800;">Grand Total :-</td>
+                    <tr class="table-warning" style="font-size: 1.2rem;">
+                        <td colspan="1" scope="row" style="font-weight: 800;">Grand Total:-</td>
                         <td colspan="2" style="font-weight: 800;">
                             ₹ {{ $total_amt }}
                         </td>
@@ -120,8 +125,18 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr class="table-warning" style="font-size: 1.5rem;">
-                        <td colspan="1" scope="row" style="font-weight: 800;">Wallet Balance :-</td>
+                    @if($voucher->status === 2)
+                        <tr class="table-warning" style="font-size: 1.2rem;">
+                            <td colspan="1" scope="row" style="font-weight: 800;">Approved Amount:-</td>
+                            <td colspan="2" style="font-weight: 800;">
+                                ₹ {{ $voucher->approved_amount  }} on {{ $voucher->approval_date->format('d-M-Y') }}
+                            </td>
+                            <td colspan="2"></td>
+                            <td></td>
+                        </tr>
+                    @endif
+                    <tr class="table-warning" style="font-size: 1.2rem;">
+                        <td colspan="1" scope="row" style="font-weight: 800;">Wallet Balance:-</td>
                         <td colspan="2" style="font-weight: 800;">
                             ₹ {{ $voucher->employee()->first()->wallet_balance }}
                         </td>
@@ -194,6 +209,7 @@
 @stop
 
 @section('js')
+    <script src="{{ asset('js/downloadfiles.js') }}"></script>
     <script src="{{ asset('js/adminVoucherApproval.js') }}"></script>
     <script src="{{ asset('js/s2.js') }}"></script>
 @stop

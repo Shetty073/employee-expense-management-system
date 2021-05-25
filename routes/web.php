@@ -95,6 +95,7 @@ Route::group(['prefix' => '/vouchers', 'middleware' => ['auth', 'can:employee']]
 
     Route::post('/createExpense/{id}', [VoucherController::class, 'createExpense'])->name('vouchers.createExpense');
     Route::post('/updateExpense/{id}', [VoucherController::class, 'updateExpense'])->name('vouchers.updateExpense');
+    Route::post('/destroyExpense', [VoucherController::class, 'destroyExpense'])->name('vouchers.destroyExpense');
 
     Route::post('/askForApproval', [VoucherController::class, 'askForApproval'])->name('vouchers.askForApproval');
 

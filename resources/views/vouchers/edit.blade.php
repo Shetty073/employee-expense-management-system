@@ -42,13 +42,6 @@
                 </select>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group col-sm-3">
-                <label for="voucherdate">Voucher Date</label>
-                <input type="date" class="form-control" id="voucherdate" name="voucherdate"
-                value="@if(isset($voucher)){{ $voucher->date }}@else{{ old('voucherdate') }}@endif" required>
-            </div>
-        </div>
 
         @if($voucher->status === 0)
             <div class="form-group">
@@ -78,7 +71,7 @@
                 <div class="form-group col-sm-2">
                     <label for="date">Expense Date</label>
                     <input type="date" class="form-control" id="date" name="date"
-                    value="@if(isset($expense)){{ $expense->date }}@else{{ old('date') }}@endif" required>
+                    value="@if(isset($expense)){{ $expense->date->format('d-M-Y') }}@else{{ old('date') }}@endif" required>
                 </div>
                 <div class="form-group col-sm-3">
                     <label for="category">Expense Category</label>
@@ -90,17 +83,17 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-sm-3">
-                    <label for="description">Expense Description</label>
-                    <textarea type="text" class="form-control" id="description" name="description" rows="1" required></textarea>
-                </div>
-                <div class="form-group col-sm-2">
-                    <label for="bill">Expense Bill</label>
-                    <input type="file" class="form-control" id="bill" name="bill">
-                </div>
                 <div class="form-group col-sm-2">
                     <label for="amount">Expense Amount</label>
                     <input type="number" class="form-control" id="amount" name="amount">
+                </div>
+                <div class="form-group col-sm-2">
+                    <label for="bill">Expense Bill</label>
+                    <input type="file" class="form-control" id="bill" name="bill[]" multiple>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="description">Expense Description</label>
+                    <textarea type="text" class="form-control" id="description" name="description" rows="1" required></textarea>
                 </div>
             </div>
 
@@ -138,17 +131,17 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-group col-sm-3">
-                <label for="description">Expense Description</label>
-                <textarea type="text" class="form-control" id="updateDescription" name="description" rows="1" required></textarea>
-            </div>
-            <div class="form-group col-sm-2">
-                <label for="bill">Expense Bill</label>
-                <input type="file" class="form-control" id="updateBill" name="bill">
-            </div>
             <div class="form-group col-sm-2">
                 <label for="amount">Expense Amount</label>
                 <input type="number" class="form-control" id="updateAmount" name="amount" required>
+            </div>
+            <div class="form-group col-sm-2">
+                <label for="bill">Expense Bill</label>
+                <input type="file" class="form-control" id="updateBill" name="bill[]" multiple>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="description">Expense Description</label>
+                <textarea type="text" class="form-control" id="updateDescription" name="description" rows="1" required></textarea>
             </div>
         </div>
         <div class="form-group">
@@ -167,24 +160,31 @@
                 <tr>
                     <th scope="col">Date</th>
                     <th scope="col">Category</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Bill</th>
                     <th scope="col">Amount</th>
+                    <th scope="col">Bill</th>
+                    <th scope="col">Description</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($expenses as $expense)
                     <tr @if($voucher->status === 0)class="editExpenseBtn"@endif>
                         <td hidden class="data">{{ $expense->id }}</td>
-                        <td class="data">{{ $expense->date->format('d-m-Y') }}</td>
+                        <td class="data">{{ $expense->date->format('d-M-Y') }}</td>
                         <td hidden class="data">{{ $expense->category_id }}</td>
                         <td class="data">{{ App\Models\ExpenseCategory::where('id', $expense->category_id)->first()->name }}</td>
-                        <td class="data">{{ $expense->description }}</td>
-                        <td>{{ $expense->bill }}</td>
                         <td class="data">
-                            <span class="badge badge-primary px-2 py-2">₹ {{ $expense->amount }}</span>
+                            <span class="badge badge-primary px-2 py-2" style="font-size: 1.1rem;">₹ {{ $expense->amount }}</span>
                         </td>
+                        <td>
+                            <a href="#">click to download</a>
+                        </td>
+                        <td class="data">{{ $expense->description }}</td>
                     </tr>
+                    @foreach ($expense->bills as $bill)
+                        <span class="billurl {{ $expense->id }}" hidden>
+                            {{ asset('storage/bill/' . $bill->file_name) }}
+                        </span>
+                    @endforeach
                 @endforeach
             </tbody>
         </table>
@@ -203,9 +203,11 @@
 
 <input type="hidden" id="voucherId" value="{{ $voucher->id }}">
 <input type="hidden" id="url" value="{{ route('vouchers.askForApproval') }}">
+<input type="hidden" id="deleteExpenseUrl" value="{{ route('vouchers.destroyExpense') }}">
 @stop
 
 @section('js')
+    <script src="{{ asset('js/downloadfiles.js') }}"></script>
     <script src="{{ asset('js/approval.js') }}"></script>
     <script src="{{ asset('js/s2.js') }}"></script>
 @stop

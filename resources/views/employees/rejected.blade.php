@@ -14,8 +14,9 @@
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Employee Name</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Total Amount</th>
+                        <th scope="col">Voucher Date</th>
+                        <th scope="col">Proposed Amount</th>
+                        <th scope="col">Rejected On</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -31,12 +32,13 @@
                     ?>
                     <tr>
                         <td>{{ $voucher->employee()->first()->name }}</td>
-                        <td>{{ $voucher->date }}</td>
+                        <td>{{ $voucher->date->format('d-M-Y') }}</td>
                         <td>
                             <span class="badge badge-primary px-2 py-2">
                                 ₹ {{ $total_amt }}
                             </span>
                         </td>
+                        <td>{{ $voucher->approval_date->format('d-M-Y') }}</td>
                         <td>
                             <a class="btn btn-primary" href="{{ route('employees.voucherDetails', ['id' => $voucher->id]) }}">View</a>
                         </td>

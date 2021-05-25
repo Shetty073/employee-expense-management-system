@@ -41,7 +41,7 @@
                             </span>
                         </td>
                         <td style="font-weight: 600;">
-                            {{ $payment->date->format('d-m-Y') }}
+                            {{ $payment->date->format('d-M-Y') }}
                         </td>
                         <td style="font-weight: 600;">
                             {{ $payment->remark }}

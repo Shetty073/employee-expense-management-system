@@ -12,7 +12,6 @@ class Expense extends Model
     protected $fillable = [
         'date',
         'description',
-        'bill',
         'amount',
         'remark',
     ];
@@ -30,5 +29,10 @@ class Expense extends Model
     public function expensecategory()
     {
         return $this->belongsTo(ExpenseCategory::class, 'category_id');
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
     }
 }

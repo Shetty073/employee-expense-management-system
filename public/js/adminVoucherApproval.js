@@ -1,8 +1,21 @@
-// download all bills at once
+// download all bills of a particular expense
+$(document).on('click', '.downloadExpenseBillsBtn', function () {
+    let id = $(this).prop('id');
+    let urls = [];
+    $(`.billurl, ${id}`).each(function () {
+        urls.push($(this).text().trim());
+    });
+
+    downloadBills(urls)
+});
+
+// download all bills of the voucher at once
 $(document).on('click', '#downloadAllBillsBtn', function () {
-    window.open('mysite.com/file1');
-    window.open('mysite.com/file2');
-    window.open('mysite.com/file3');
+    let urls = [];
+    $('.billurl').each(function () {
+        urls.push($(this).text().trim());
+    });
+    downloadBills(urls);
 });
 
 // total amount logic
@@ -108,7 +121,7 @@ $(document).on('click', '#approveVoucherBtn', function () {
                         'Failed!',
                         'Request was not unsuccessful! Please contact the system administrator.',
                         'error'
-                    )
+                    );
                 }
             });
 
@@ -117,10 +130,10 @@ $(document).on('click', '#approveVoucherBtn', function () {
             result.dismiss === Swal.DismissReason.cancel
         ) {
             swalWithBootstrapButtons.fire(
-                'Cancelled',
+                'No action taken',
                 'This voucher is neither approved nor rejected',
-                'error'
-            )
+                'info'
+            );
         }
     });
 });
@@ -210,7 +223,7 @@ $(document).on('click', '#rejectVoucherBtn', function () {
                         'Failed!',
                         'Request was not unsuccessful! Please contact the system administrator.',
                         'error'
-                    )
+                    );
                 }
             });
 
@@ -219,10 +232,10 @@ $(document).on('click', '#rejectVoucherBtn', function () {
             result.dismiss === Swal.DismissReason.cancel
         ) {
             swalWithBootstrapButtons.fire(
-                'Cancelled',
+                'No action taken',
                 'This voucher is neither approved nor rejected',
-                'error'
-            )
+                'info'
+            );
         }
     });
 });

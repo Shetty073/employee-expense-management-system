@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\Job;
 use App\Models\Payment;
 use App\Models\Voucher;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class VoucherController extends Controller
@@ -49,7 +51,7 @@ class VoucherController extends Controller
         $voucherId = json_decode($request->getContent(), true)['voucher_id'];
         $status = json_decode($request->getContent(), true)['status'];
         $expense_remarks = json_decode($request->getContent(), true)['expense_remarks'];
-        $expense_amounts = json_decode($request->getContent(), true)['expense_amounts'];
+        // $expense_amounts = json_decode($request->getContent(), true)['expense_amounts'];
 
         $voucher = Voucher::findorfail($voucherId);
         $voucher->update([
@@ -85,6 +87,9 @@ class VoucherController extends Controller
 
             $payment->employee()->associate($employee);
             $payment->save();
+
+            $voucher->approved_amount = $amount;
+            $voucher->save();
         }
 
         // update the remarks for each expense if any
@@ -98,14 +103,18 @@ class VoucherController extends Controller
         }
 
         // update the amount for each expense in case its changed
-        if(count($expense_amounts) > 0) {
-            foreach ($expense_amounts as $id => $amount) {
-                $expense = Expense::where('id', $id)->first();
-                $expense->update([
-                    'amount' => $amount,
-                ]);
-            }
-        }
+        // if(count($expense_amounts) > 0) {
+        //     foreach ($expense_amounts as $id => $amount) {
+        //         $expense = Expense::where('id', $id)->first();
+        //         $expense->update([
+        //             'amount' => $amount,
+        //         ]);
+        //     }
+        // }
+
+        // Note: approval_date can be treated as rejection_date for rejected vouchers
+        $voucher->approval_date = Carbon::now();
+        $voucher->save();
 
         return response()->json([
             'process' => 'success',
@@ -148,11 +157,10 @@ class VoucherController extends Controller
 
         $this->validate($request, [
             'job' =>'required',
-            'voucherdate' => 'required',
         ]);
 
         $voucher = Voucher::create([
-            'date' => $request->input('voucherdate'),
+            'date' => Carbon::now(),
         ]);
 
         foreach ($request->input('job') as $key => $value) {
@@ -206,14 +214,9 @@ class VoucherController extends Controller
     {
         $this->validate($request, [
             'job' =>'required',
-            'voucherdate' => 'required',
         ]);
 
         $voucher = Voucher::findorfail($id);
-
-        $voucher->update([
-            'date' => $request->input('voucherdate'),
-        ]);
 
         $voucher->jobs()->detach();
 
@@ -248,14 +251,24 @@ class VoucherController extends Controller
         ]);
 
         if ($request->hasFile('bill')) {
-            // Save the bill file
-            $fileName = $request->file('bill')->getClientOriginalName();
-            $fileExtension = $request->file('bill')->getClientOriginalExtension();
-            $fileName = chop($fileName, $fileExtension);
-            $fileNameToStore = $fileName . '_' . $expense->id . '_' . time() . '.' . $fileExtension;
-            $path = $request->file('bill')->storeAs('public/bill', $fileNameToStore);
-            $expense->bill = $fileNameToStore;
-            $expense->save();
+            $bills = $request->file('bill');
+
+            // Save the bill files
+            foreach ($bills as $billfile) {
+                $bill = Bill::create([
+                    'file_name' => '',
+                ]);
+                $fileName = $billfile->getClientOriginalName();
+                $fileExtension = $billfile->getClientOriginalExtension();
+                $fileName = chop($fileName, $fileExtension);
+                $fileNameToStore = $fileName . '_' . $bill->id . '_' . $expense->id . '_' . time() . '.' . $fileExtension;
+                $path = $billfile->storeAs('public/bill', $fileNameToStore);
+
+                $bill->file_name = $fileNameToStore;
+                $bill->expense()->associate($expense);
+                $bill->save();
+            }
+
         }
 
         $expense->voucher()->associate($voucher);
@@ -282,14 +295,34 @@ class VoucherController extends Controller
         ]);
 
         if ($request->hasFile('bill')) {
-            // Save the bill file
-            $fileName = $request->file('bill')->getClientOriginalName();
-            $fileExtension = $request->file('bill')->getClientOriginalExtension();
-            $fileName = chop($fileName, $fileExtension);
-            $fileNameToStore = $fileName . '_' . $expense->id . '_' . time() . '.' . $fileExtension;
-            $path = $request->file('bill')->storeAs('public/bill', $fileNameToStore);
-            $expense->bill = $fileNameToStore;
-            $expense->save();
+            $bills = $request->file('bill');
+
+            // Save the bill files
+            foreach ($bills as $billfile) {
+                $bill = Bill::create([
+                    'file_name' => '',
+                ]);
+                $fileName = $billfile->getClientOriginalName();
+                $fileExtension = $billfile->getClientOriginalExtension();
+                $fileName = chop($fileName, $fileExtension);
+                $fileNameToStore = $fileName . '_' . $bill->id . '_' . $expense->id . '_' . time() . '.' . $fileExtension;
+                $path = $billfile->storeAs('public/bill', $fileNameToStore);
+
+                // associate this newly uploaded bills to this expense
+                $bill->file_name = $fileNameToStore;
+                $bill->expense()->associate($expense);
+                $bill->save();
+
+                // delete old bills
+                $old_bills = Bill::where('expense_id', $expense->id)->get();
+                foreach ($old_bills as $old_bill) {
+                    $file_path = public_path('storage/bill/' . $old_bill->file_name);
+                    @unlink($file_path);
+
+                    $old_bill->delete();
+                }
+            }
+
         }
 
         $expense->expensecategory()->disassociate();
@@ -302,6 +335,26 @@ class VoucherController extends Controller
         $voucher = Voucher::where('id', $expense->voucher_id)->first();
 
         return redirect(route('vouchers.edit', ['id' => $voucher->id]));
+    }
+
+    public function destroyExpense(Request $request)
+    {
+        // This will respond to fetch API request
+        $expenseId = json_decode($request->getContent(), true)['expense_id'];
+        $expense = Expense::findorfail($expenseId);
+
+        $old_bills = Bill::where('expense_id', $expense->id)->get();
+        foreach ($old_bills as $old_bill) {
+            $file_path = public_path('storage/bill/' . $old_bill->file_name);
+            @unlink($file_path);
+
+            $old_bill->delete();
+        }
+        $expense->delete();
+
+        return response()->json([
+            'process' => 'success',
+        ]);
     }
 
     public function askForApproval(Request $request)
@@ -331,11 +384,14 @@ class VoucherController extends Controller
 
         $expenses = $voucher->expenses()->get();
         foreach ($expenses as $expense) {
-            if ($expense->bill !== null) {
-                // Delete old photo file
-                $file_path = public_path('storage/bill/' . $expense->bill);
+            $old_bills = Bill::where('expense_id', $expense->id)->get();
+            foreach ($old_bills as $old_bill) {
+                $file_path = public_path('storage/bill/' . $old_bill->file_name);
                 @unlink($file_path);
+
+                $old_bill->delete();
             }
+            $expense->delete();
         }
 
         $voucher->delete();

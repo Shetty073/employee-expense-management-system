@@ -88,6 +88,19 @@
             </div>
         @endif
     @endif
+    <div class="form-group col-sm-4">
+        <label for="aadhar_photo">Aadhar Card Photo</label>
+        <input type="file" class="form-control" id="aadhar_photo" name="aadhar_photo">
+    </div>
+    @if (isset($employee))
+        @if ($employee->photo)
+            <div class="form-group col-sm-1">
+                <span>
+                    <img width="60" height="60" src="{{ asset('storage/employee/' . $employee->aadhar_photo) }}" class="img-thumbnail" alt="Employee aadhar photo">
+                </span>
+            </div>
+        @endif
+    @endif
 </div>
 
 

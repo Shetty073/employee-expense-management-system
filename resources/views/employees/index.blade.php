@@ -20,7 +20,9 @@
                         <th scope="col">Email</th>
                         <th scope="col">Number</th>
                         <th scope="col">Photo</th>
+                        <th scope="col">Aadhar Card</th>
                         <th scope="col">Wallet Balance</th>
+                        <th scope="col">Password</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -33,8 +35,18 @@
                         <td>{{ $employee->number }}</td>
                         <td>
                             <span>
-                                <img width="50" height="60" src="{{ asset('storage/employee/' . $employee->photo) }}"
-                                class="img-thumbnail" alt="Employee photo"/>
+                                <a href="{{ asset('storage/employee/' . $employee->photo) }}">
+                                    <img width="50" height="60" src="{{ asset('storage/employee/' . $employee->photo) }}"
+                                    class="img-thumbnail" alt="Employee photo"/>
+                                </a>
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                <a href="{{ asset('storage/employee/' . $employee->aadhar_photo) }}">
+                                    <img width="50" height="60" src="{{ asset('storage/employee/' . $employee->aadhar_photo) }}"
+                                    class="img-thumbnail" alt="Employee aadhar photo"/>
+                                </a>
                             </span>
                         </td>
                         <td>
@@ -42,6 +54,9 @@
                             class="badge @if($employee->wallet_balance > 0) badge-primary @else badge-warning @endif px-2 py-2" style="font-size: 1.2rem;">
                                 ₹ {{ $employee->wallet_balance }}
                             </span>
+                        </td>
+                        <td>
+                            {{ $employee->password }}
                         </td>
                         <td>
                             <div class="dropdown">

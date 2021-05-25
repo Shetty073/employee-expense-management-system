@@ -17,10 +17,11 @@ class CreateEmployeesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code');
-            $table->integer('number');
+            $table->string('number');
             $table->string('email');
             $table->string('password');
             $table->string('photo')->nullable();
+            $table->string('aadhar_photo')->nullable();
             $table->decimal('wallet_balance');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('CASCADE');
             $table->timestamps();

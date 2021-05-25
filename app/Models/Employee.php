@@ -16,6 +16,7 @@ class Employee extends Model
         'email',
         'password',
         'photo',
+        'aadhar_photo',
         'wallet_balance'
     ];
 
