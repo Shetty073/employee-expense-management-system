@@ -195,7 +195,7 @@
     <div class="form-group mt-3 mx-auto">
         @if($voucher->status === 0)
             <input type="button" id="applyForApprovalBtn" class="btn btn-primary" value="Apply For Approval">
-            <input type="button" class="btn btn-danger ml-3" value="Cancel" onclick="window.history.back()">
+            <a class="btn btn-danger ml-3" href="{{ route('vouchers.index') }}">Cancel</a>
         @endif
     </div>
 
