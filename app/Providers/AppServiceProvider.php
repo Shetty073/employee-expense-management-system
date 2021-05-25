@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Voucher::created(function ($voucher) {
-            $number = auth()->user()->employee->code . $voucher->id;
+            $number = auth()->user()->employee->code . '-' . $voucher->id;
             $voucher->number = $number;
             $voucher->save();
         });

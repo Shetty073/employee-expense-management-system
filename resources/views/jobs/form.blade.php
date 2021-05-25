@@ -18,7 +18,7 @@
     </div>
     <div class="form-group col-sm-4">
         <label for="number">Job Number</label>
-        <input type="number" class="form-control" id="number" name="number"
+        <input type="text" class="form-control" id="number" name="number"
         value="@if(isset($job)){{ $job->number }}@else{{ old('number') }}@endif" required>
     </div>
 </div>
