@@ -347,6 +347,9 @@ DROP TABLE IF EXISTS `vouchers`;
 CREATE TABLE `vouchers` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
+  `number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `approval_date` date DEFAULT NULL,
+  `approved_amount` decimal(8,2) DEFAULT NULL,
   `status` int NOT NULL DEFAULT '0',
   `employee_id` bigint unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -375,4 +378,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-25 14:24:45
+-- Dump completed on 2021-05-25 18:34:19
