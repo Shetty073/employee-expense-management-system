@@ -192,19 +192,35 @@
     <div class="row">
         <div class="form-group col-sm-3">
             <label for="siteCompletionDocBtn">Site Completion Docs: </label>
-            <button class="btn btn-secondary" id="siteCompletionDocBtn">Download Files</button>
+            @if(count($voucher->sitecompletiondocs) > 0)
+                <button class="btn btn-secondary" id="siteCompletionDocBtn">Download Files</button>
+            @else
+                <span class="badge badge-secondary">No Files</span>
+            @endif
         </div>
         <div class="form-group col-sm-3">
             <label for="receivedDocsBtn">Received Docs: </label>
-            <button class="btn btn-secondary" id="receivedDocsBtn">Download Files</button>
+            @if(count($voucher->receiveddocs) > 0)
+                <button class="btn btn-secondary" id="receivedDocsBtn">Download Files</button>
+            @else
+                <span class="badge badge-secondary">No Files</span>
+            @endif
         </div>
         <div class="form-group col-sm-3">
             <label for="returnableListBtn">Returnable List: </label>
-            <button class="btn btn-secondary" id="returnableListBtn">Download Files</button>
+            @if(count($voucher->returnablelistdocs) > 0)
+                <button class="btn btn-secondary" id="returnableListBtn">Download Files</button>
+            @else
+                <span class="badge badge-secondary">No Files</span>
+            @endif
         </div>
         <div class="form-group col-sm-3">
             <label for="submittedDocsBtn">Submitted Docs: </label>
-            <button class="btn btn-secondary" id="submittedDocsBtn">Download Files</button>
+            @if(count($voucher->submitteddocs) > 0)
+                <button class="btn btn-secondary" id="submittedDocsBtn">Download Files</button>
+            @else
+                <span class="badge badge-secondary">No Files</span>
+            @endif
         </div>
     </div>
     <br>
