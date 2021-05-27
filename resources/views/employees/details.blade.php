@@ -190,19 +190,19 @@
     @endforeach
 
     <div class="row">
-        <div class="form-group col-sm-4">
+        <div class="form-group col-sm-3">
             <label for="siteCompletionDocBtn">Site Completion Docs: </label>
             <button class="btn btn-secondary" id="siteCompletionDocBtn">Download Files</button>
         </div>
-        <div class="form-group col-sm-4">
+        <div class="form-group col-sm-3">
             <label for="receivedDocsBtn">Received Docs: </label>
             <button class="btn btn-secondary" id="receivedDocsBtn">Download Files</button>
         </div>
-        <div class="form-group col-sm-4">
+        <div class="form-group col-sm-3">
             <label for="returnableListBtn">Returnable List: </label>
             <button class="btn btn-secondary" id="returnableListBtn">Download Files</button>
         </div>
-        <div class="form-group col-sm-4">
+        <div class="form-group col-sm-3">
             <label for="submittedDocsBtn">Submitted Docs: </label>
             <button class="btn btn-secondary" id="submittedDocsBtn">Download Files</button>
         </div>
