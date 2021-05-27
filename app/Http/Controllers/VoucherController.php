@@ -85,14 +85,17 @@ class VoucherController extends Controller
             <body>';
 
         $content .= '
+            <div class="pull-right">
+                <img src="' . asset('logo/logo.jpg') . '" />
+            </div>
             <div class="row">
                 <div class="col-sm-6"><b>Employee Number:</b> ' . $voucher->number . '</div>
-                <div class="col-sm-6"><b>Voucher Date:</b> ' . $voucher->date->format('d-M-Y') . '</div>
+                <div class="col-sm-6"><b>Employee Name:</b> ' . $voucher->employee()->first()->name . '</div>
             </div>';
 
         $content .= '
             <div class="row">
-                <div class="col-sm-6"><b>Employee Name:</b> ' . $voucher->employee()->first()->name . '</div>
+                <div class="col-sm-6"><b>Voucher Date:</b> ' . $voucher->date->format('d-M-Y') . '</div>
                 <div class="col-sm-6"><b>Voucher Jobs:</b> ';
 
         foreach ($voucherjobs as $job) {
@@ -140,29 +143,25 @@ class VoucherController extends Controller
                     $content .= '</tr>';
                 }
 
-                if($voucher->status === 2) {
-                    $content .= '<tr class="table-warning">
-                        <td colspan="1" scope="row"><b>Approved Total:-</b></td>
-                        <td colspan="2">
-                            <b>₹ ' . $voucher->approved_amount . ' on ' . $voucher->approval_date->format('d-M-Y') .
-                        '</b></td>
-                        <td colspan="3"></td>
-                        <td></td>
-                    </tr>';
-                }
-
                 $total_amt = 0.0;
                 foreach ($expenses as $exp) {
                     $total_amt += $exp->amount;
                 }
 
-                $content .= '<tr class="table-warning">
-                        <td colspan="1" scope="row"><b>Proposed Total:-</b></td>
-                        <td colspan="2">
+                if($voucher->status === 2) {
+                    $content .= '<tr class="table-warning">
+                        <td colspan="2" scope="row"><b>Total:-</b></td>
+                        <td>
                             <b>₹ ' . $total_amt .
                         '</b></td>
-                        <td colspan="4"></td>
-                    </tr>
+                        <td>
+                            <b>₹ ' . $voucher->approved_amount .
+                        '</b></td>
+                        <td colspan="3"></td>
+                    </tr>';
+                }
+
+                $content .= '
                     <tr class="table-warning">
                         <td colspan="1" scope="row"><b>Wallet Balance:-</b></td>
                         <td colspan="2">
@@ -268,13 +267,34 @@ class VoucherController extends Controller
             </thead>
             <tbody>
                 <tr>
-                    <td>Pay To Com</td>
+                    <td>Pay To Company</td>
                     <td></td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Pay To Emp</td>
+                    <td>Pay To Employee</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        </div><br>';
+
+        $content .= '<div class="table-responsive">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col thin-col">Project Allowance</th>
+                    <th scope="col">Number Of Days</th>
+                    <th scope="col">Approved Days</th>
+                    <th scope="col">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

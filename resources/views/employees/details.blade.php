@@ -120,20 +120,6 @@
                         </span>
                     @endforeach
                 @endforeach
-                    @if($voucher->status === 2)
-                        <tr class="table-warning" style="font-size: 1.2rem;">
-                            <td colspan="1" scope="row" style="font-weight: 800;">Approved Total:-</td>
-                            <td colspan="2" style="font-weight: 800;">
-                                ₹ {{ $voucher->approved_amount  }} on {{ $voucher->approval_date->format('d-M-Y') }}
-                            </td>
-                            <td colspan="3"></td>
-                            <td>
-                                <button class="btn btn-primary" id="downloadAllBillsBtn">
-                                    Download All Bills
-                                </button>
-                            </td>
-                        </tr>
-                    @endif
                     <?php
                         $total_amt = 0.0;
                         foreach ($expenses as $exp) {
@@ -141,20 +127,23 @@
                         }
                     ?>
                     <tr class="table-warning" style="font-size: 1.2rem;">
-                        <td colspan="1" scope="row" style="font-weight: 800;">Proposed Total:-</td>
-                        <td colspan="2" style="font-weight: 800;">
+                        <td colspan="2" scope="row" style="font-weight: 800;">Total:-</td>
+                        <td style="font-weight: 800;">
                             ₹ {{ $total_amt }}
                         </td>
-                        @if($voucher->status !== 2)
-                            <td colspan="3"></td>
-                            <td>
-                                <button class="btn btn-primary" id="downloadAllBillsBtn">
-                                    Download All Bills
-                                </button>
-                            </td>
-                        @else
-                            <td colspan="4"></td>
-                        @endif
+                        <td style="font-weight: 800;">
+                            @if ($voucher->approved_amount)
+                                ₹ {{ $voucher->approved_amount }}
+                            @else
+                                Not Yet Approved
+                            @endif
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            <button class="btn btn-primary" id="downloadAllBillsBtn">
+                                Download All Bills
+                            </button>
+                        </td>
                     </tr>
                     <tr class="table-warning" style="font-size: 1.2rem;">
                         <td colspan="1" scope="row" style="font-weight: 800;">Wallet Balance:-</td>

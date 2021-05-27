@@ -8,12 +8,15 @@
 
 @section('content')
     <div class="card px-3 py-1">
+        <input type="text" id="searchBox" placeholder="🔍 Search the table below">
+        <br>
 
         <div class="table-responsive">
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Employee Name</th>
+                        <th scope="col">Job Numbers</th>
                         <th scope="col">Voucher Number</th>
                         <th scope="col">Voucher Date</th>
                         <th scope="col">Proposed Amount</th>
@@ -33,6 +36,11 @@
                     ?>
                     <tr>
                         <td>{{ $voucher->employee()->first()->name }}</td>
+                        <td>
+                            @foreach ($voucher->jobs as $job)
+                                {{ $job->number }}@if(!$loop->last), @endif
+                            @endforeach
+                        </td>
                         <td>{{ $voucher->number }}</td>
                         <td>{{ $voucher->date->format('d-M-Y') }}</td>
                         <td>
@@ -56,8 +64,8 @@
 
 {{-- @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
-@stop
+@stop --}}
 
 @section('js')
-    <script> console.log('Hi!'); </script>
-@stop --}}
+    <script src="{{ asset('js/tableFilter.js') }}"></script>
+@stop

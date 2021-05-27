@@ -45,12 +45,12 @@ return [
     |
     */
 
-    'logo' => '<b>E-Wallet</b>',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => 'EMS',
+    'logo_img' => 'logo/logo.jpg',
     'logo_img_class' => 'brand-image img-circle elevation-3',
-    'logo_img_xl' => null,
+    'logo_img_xl' => 'logo/logo.jpg',
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'E-Wallet',
+    'logo_img_alt' => 'EMS',
 
     /*
     |--------------------------------------------------------------------------
