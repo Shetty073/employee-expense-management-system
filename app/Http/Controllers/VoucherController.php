@@ -87,16 +87,14 @@ class VoucherController extends Controller
         $content .= '
             <div class="pull-right">
                 <img src="' . asset('logo/logo.jpg') . '" />
-            </div>
-            <div class="row">
-                <div class="col-sm-6"><b>Employee Number:</b> ' . $voucher->number . '</div>
-                <div class="col-sm-6"><b>Employee Name:</b> ' . $voucher->employee()->first()->name . '</div>
             </div>';
 
         $content .= '
             <div class="row">
-                <div class="col-sm-6"><b>Voucher Date:</b> ' . $voucher->date->format('d-M-Y') . '</div>
-                <div class="col-sm-6"><b>Voucher Jobs:</b> ';
+                <div class="col-sm-3"><b>Employee Number:</b> ' . $voucher->number . '</div>
+                <div class="col-sm-3"><b>Employee Name:</b> ' . $voucher->employee()->first()->name . '</div>
+                <div class="col-sm-3"><b>Voucher Date:</b> ' . $voucher->date->format('d-M-Y') . '</div>
+                <div class="col-sm-3"><b>Voucher Jobs:</b> ';
 
         foreach ($voucherjobs as $job) {
             # code...
