@@ -69,10 +69,11 @@
                 <tr>
                     <th scope="col">Date</th>
                     <th scope="col">Category</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Bill</th>
+                    <th scope="col">Proposed Amount</th>
+                    <th scope="col">Approved Amount</th>
                     <th scope="col">Description</th>
                     <th scope="col">Remark</th>
+                    <th scope="col">Bill</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,11 +82,29 @@
                         <td class="data">{{ $expense->date->format('d-M-Y') }}</td>
                         <td hidden class="data">{{ $expense->category_id }}</td>
                         <td class="data">{{ App\Models\ExpenseCategory::where('id', $expense->category_id)->first()->name }}</td>
-                        <td class="data">
+                        <td>
                             <span class="badge badge-primary px-2 py-2">
-                                ₹ <input type="number" class="expenseamount" id="{{ $expense->id }}" value="{{ $expense->amount }}"
-                                @if($voucher->status !== 1) disabled @endif>
+                                ₹ {{ $expense->amount }}
                             </span>
+                        </td>
+                        <td class="data">
+                            @if($voucher->status === 1)
+                                <span class="badge badge-primary px-2 py-2">
+                                    ₹ <input type="number" class="expenseamount" id="{{ $expense->id }}" value="{{ $expense->amount }}">
+                                </span>
+                            @else
+                                <span class="badge badge-primary px-2 py-2">
+                                    ₹ {{ $expense->approved_amount }}
+                                </span>
+                            @endif
+                        </td>
+                        <td class="data">{{ $expense->description }}</td>
+                        <td class="data">
+                            @if($voucher->status === 1)
+                                <input type="text" class="expenseremark" id="{{ $expense->id }}" value="{{ $expense->remark }}">
+                            @else
+                                {{ $expense->remark }}
+                            @endif
                         </td>
                         <td>
                             @if(count($expense->bills) > 0)
@@ -94,11 +113,6 @@
                                 <span class="badge badge-danger">Bill Not Provided</span>
                             @endif
                         </td>
-                        <td class="data">{{ $expense->description }}</td>
-                        <td class="data">
-                            <input type="text" class="expenseremark" id="{{ $expense->id }}" value="{{ $expense->remark }}"
-                            @if($voucher->status !== 1) disabled @endif>
-                        </td>
                     </tr>
                     @foreach ($expense->bills as $bill)
                         <span class="billurl {{ $expense->id }}" hidden>
@@ -106,6 +120,20 @@
                         </span>
                     @endforeach
                 @endforeach
+                    @if($voucher->status === 2)
+                        <tr class="table-warning" style="font-size: 1.2rem;">
+                            <td colspan="1" scope="row" style="font-weight: 800;">Approved Total:-</td>
+                            <td colspan="2" style="font-weight: 800;">
+                                ₹ {{ $voucher->approved_amount  }} on {{ $voucher->approval_date->format('d-M-Y') }}
+                            </td>
+                            <td colspan="3"></td>
+                            <td>
+                                <button class="btn btn-primary" id="downloadAllBillsBtn">
+                                    Download All Bills
+                                </button>
+                            </td>
+                        </tr>
+                    @endif
                     <?php
                         $total_amt = 0.0;
                         foreach ($expenses as $exp) {
@@ -113,35 +141,18 @@
                         }
                     ?>
                     <tr class="table-warning" style="font-size: 1.2rem;">
-                        <td colspan="1" scope="row" style="font-weight: 800;">Grand Total:-</td>
+                        <td colspan="1" scope="row" style="font-weight: 800;">Proposed Total:-</td>
                         <td colspan="2" style="font-weight: 800;">
                             ₹ {{ $total_amt }}
                         </td>
-                        <td>
-                            <button class="btn btn-primary" id="downloadAllBillsBtn">
-                                Download All Bills
-                            </button>
-                        </td>
-                        <td></td>
-                        <td></td>
+                        <td colspan="4"></td>
                     </tr>
-                    @if($voucher->status === 2)
-                        <tr class="table-warning" style="font-size: 1.2rem;">
-                            <td colspan="1" scope="row" style="font-weight: 800;">Approved Amount:-</td>
-                            <td colspan="2" style="font-weight: 800;">
-                                ₹ {{ $voucher->approved_amount  }} on {{ $voucher->approval_date->format('d-M-Y') }}
-                            </td>
-                            <td colspan="2"></td>
-                            <td></td>
-                        </tr>
-                    @endif
                     <tr class="table-warning" style="font-size: 1.2rem;">
                         <td colspan="1" scope="row" style="font-weight: 800;">Wallet Balance:-</td>
                         <td colspan="2" style="font-weight: 800;">
                             ₹ {{ $voucher->employee()->first()->wallet_balance }}
                         </td>
-                        <td colspan="2"></td>
-                        <td></td>
+                        <td colspan="4"></td>
                     </tr>
             </tbody>
         </table>
@@ -149,10 +160,17 @@
     <br>
 
     @if($voucher->status === 1)
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="special_remark">Special Remark:</label>
+                <input type="text" id="special_remark" class="form-control">
+            </div>
+        </div>
+        <br>
         <form>
             <div class="row">
                 <div class="col-sm-4">
-                    <label for="totalAmountPaid">Amount Paid:</label>
+                    <label for="totalAmountPaid">Total Approved Amount:</label>
                     <input type="number" id="totalAmountPaid" class="form-control" value="{{ $total_amt }}">
                 </div>
                 <div class="col-sm-4">
@@ -179,6 +197,46 @@
         </form>
     @endif
 
+    @if($voucher->status > 1)
+        <?php
+            $perCategoryTotal = array();
+            foreach ($expenseCategories as $category) {
+                $categoryWiseTotal = 0;
+                foreach ($expenses as $expense) {
+                    if ($category->id === $expense->expensecategory->id) {
+                        $categoryWiseTotal += $expense->approved_amount;
+                    }
+                }
+                $perCategoryTotal[$category->name] = $categoryWiseTotal;
+            }
+        ?>
+
+        <h6 style="font-weight: 700;">Categorywise list of approved total amount:</h6>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                            @foreach ($perCategoryTotal as $category => $total)
+                                <tr scope="row" style="font-size: 1.2rem;">
+                                    <td style="font-weight: 700;">{{ $category }}</td>
+                                    <td>₹ {{ $total }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-3">
+                <b>Special Remark: </b> {{ $voucher->special_remark }}
+            </div>
+        </div>
+
+    @endif
+
     <div class="form-group mt-3 mx-auto">
         @if($voucher->status === 0)
             <div class="alert alert-primary" role="alert">
@@ -194,10 +252,18 @@
         @elseif($voucher->status === 2)
             <div class="alert alert-success" role="alert">
                 This voucher has been approved!
+                <a href="{{ route('employees.voucherDetailsPdf', ['id' => $voucher->id]) }}"
+                    class="btn btn-secondary ml-2">
+                    <i class="fas fa-print"></i> Print Report
+                </a>
             </div>
         @elseif($voucher->status === 3)
             <div class="alert alert-danger" role="alert">
                 This voucher has been rejected!
+                <a href="{{ route('employees.voucherDetailsPdf', ['id' => $voucher->id]) }}"
+                    class="btn btn-secondary ml-2">
+                    <i class="fas fa-print"></i> Download Report
+                </a>
             </div>
         @endif
     </div>

@@ -9,7 +9,7 @@ $(document).on('click', '.editExpenseBtn', function (e) {
     selectedExpenseId = id;
 
     // check if bills download cell was clicked
-    if ($(e.target).closest('td').is(':nth-child(6)')) {
+    if ($(e.target).closest('td').is(':nth-child(7)')) {
         // download bills
         let urls = [];
         $(`.billurl, .${selectedExpenseId}`).each(function () {
@@ -146,6 +146,9 @@ $(document).on('click', '#applyForApprovalBtn', function () {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
+            // Submit the four additional files form
+            $('#extraFilesForm').submit();
+
             // perform fetch API call here
             fetch(
                 url,

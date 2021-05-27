@@ -82,6 +82,7 @@ Route::group(['prefix' => '/employees', 'middleware' => ['auth', 'can:admin']], 
     Route::get('/vouchers/approved', [VoucherController::class, 'approvedVouchers'])->name('employees.approvedVouchers');
     Route::get('/vouchers/rejected', [VoucherController::class, 'rejectedVouchers'])->name('employees.rejectedVouchers');
     Route::get('/vouchers/details/{id}', [VoucherController::class, 'voucherDetails'])->name('employees.voucherDetails');
+    Route::get('/vouchers/pdf/{id}', [VoucherController::class, 'voucherDetailsPdf'])->name('employees.voucherDetailsPdf');
     Route::post('/vouchers/approvereject', [VoucherController::class, 'voucherApproveReject'])->name('vouchers.voucherApproveReject');
 });
 
@@ -96,6 +97,7 @@ Route::group(['prefix' => '/vouchers', 'middleware' => ['auth', 'can:employee']]
     Route::post('/createExpense/{id}', [VoucherController::class, 'createExpense'])->name('vouchers.createExpense');
     Route::post('/updateExpense/{id}', [VoucherController::class, 'updateExpense'])->name('vouchers.updateExpense');
     Route::post('/destroyExpense', [VoucherController::class, 'destroyExpense'])->name('vouchers.destroyExpense');
+    Route::post('/attachAdditionalFiles/{id}', [VoucherController::class, 'attachAdditionalFiles'])->name('vouchers.attachAdditionalFiles');
 
     Route::post('/askForApproval', [VoucherController::class, 'askForApproval'])->name('vouchers.askForApproval');
 

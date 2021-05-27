@@ -20,6 +20,7 @@ class CreateExpensesTable extends Migration
             $table->string('description');
             $table->string('bill')->nullable();
             $table->decimal('amount');
+            $table->decimal('approved_amount')->nullable();
             $table->foreignId('voucher_id')->nullable()->constrained('vouchers')->onDelete('CASCADE');
             $table->string('remark')->nullable();
             $table->timestamps();

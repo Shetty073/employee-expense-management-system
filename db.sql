@@ -119,6 +119,7 @@ CREATE TABLE `expenses` (
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `bill` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `amount` decimal(8,2) NOT NULL,
+  `approved_amount` decimal(8,2) DEFAULT NULL,
   `voucher_id` bigint unsigned DEFAULT NULL,
   `remark` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -207,7 +208,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -216,7 +217,7 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_resets_table',1),(3,'2019_08_19_000000_create_failed_jobs_table',1),(4,'2021_05_18_123539_create_expense_categories_table',1),(5,'2021_05_18_124556_create_jobs_table',1),(6,'2021_05_18_124742_create_employees_table',1),(7,'2021_05_19_082243_create_vouchers_table',1),(8,'2021_05_19_082343_create_expenses_table',1),(9,'2021_05_19_085656_create_payments_table',1),(10,'2021_05_19_090836_create_voucher_job_table',1),(11,'2021_05_25_141848_create_bills_table',1);
+INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_resets_table',1),(3,'2019_08_19_000000_create_failed_jobs_table',1),(4,'2021_05_18_123539_create_expense_categories_table',1),(5,'2021_05_18_124556_create_jobs_table',1),(6,'2021_05_18_124742_create_employees_table',1),(7,'2021_05_19_082243_create_vouchers_table',1),(8,'2021_05_19_082343_create_expenses_table',1),(9,'2021_05_19_085656_create_payments_table',1),(10,'2021_05_19_090836_create_voucher_job_table',1),(11,'2021_05_25_141848_create_bills_table',1),(12,'2021_05_26_145822_create_site_completion_docs_table',1),(13,'2021_05_26_150113_create_received_docs_table',1),(14,'2021_05_26_153504_create_returnable_list_docs_table',1),(15,'2021_05_26_153622_create_submitted_docs_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,6 +274,118 @@ CREATE TABLE `payments` (
 LOCK TABLES `payments` WRITE;
 /*!40000 ALTER TABLE `payments` DISABLE KEYS */;
 /*!40000 ALTER TABLE `payments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `received_docs`
+--
+
+DROP TABLE IF EXISTS `received_docs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `received_docs` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `voucher_id` bigint unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `received_docs_voucher_id_foreign` (`voucher_id`),
+  CONSTRAINT `received_docs_voucher_id_foreign` FOREIGN KEY (`voucher_id`) REFERENCES `vouchers` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `received_docs`
+--
+
+LOCK TABLES `received_docs` WRITE;
+/*!40000 ALTER TABLE `received_docs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `received_docs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `returnable_list_docs`
+--
+
+DROP TABLE IF EXISTS `returnable_list_docs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `returnable_list_docs` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `voucher_id` bigint unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `returnable_list_docs_voucher_id_foreign` (`voucher_id`),
+  CONSTRAINT `returnable_list_docs_voucher_id_foreign` FOREIGN KEY (`voucher_id`) REFERENCES `vouchers` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `returnable_list_docs`
+--
+
+LOCK TABLES `returnable_list_docs` WRITE;
+/*!40000 ALTER TABLE `returnable_list_docs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `returnable_list_docs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `site_completion_docs`
+--
+
+DROP TABLE IF EXISTS `site_completion_docs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `site_completion_docs` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `voucher_id` bigint unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `site_completion_docs_voucher_id_foreign` (`voucher_id`),
+  CONSTRAINT `site_completion_docs_voucher_id_foreign` FOREIGN KEY (`voucher_id`) REFERENCES `vouchers` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `site_completion_docs`
+--
+
+LOCK TABLES `site_completion_docs` WRITE;
+/*!40000 ALTER TABLE `site_completion_docs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `site_completion_docs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `submitted_docs`
+--
+
+DROP TABLE IF EXISTS `submitted_docs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `submitted_docs` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `voucher_id` bigint unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `submitted_docs_voucher_id_foreign` (`voucher_id`),
+  CONSTRAINT `submitted_docs_voucher_id_foreign` FOREIGN KEY (`voucher_id`) REFERENCES `vouchers` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `submitted_docs`
+--
+
+LOCK TABLES `submitted_docs` WRITE;
+/*!40000 ALTER TABLE `submitted_docs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `submitted_docs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -347,6 +460,7 @@ DROP TABLE IF EXISTS `vouchers`;
 CREATE TABLE `vouchers` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
+  `special_remark` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `approval_date` date DEFAULT NULL,
   `approved_amount` decimal(8,2) DEFAULT NULL,
@@ -378,4 +492,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-25 18:34:19
+-- Dump completed on 2021-05-27 15:56:34

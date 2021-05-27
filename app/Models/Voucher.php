@@ -15,6 +15,7 @@ class Voucher extends Model
         'status',
         'approved_amount',
         'approval_date',
+        'special_remark',
     ];
 
     protected $casts = [
@@ -36,5 +37,25 @@ class Voucher extends Model
     public function jobs()
     {
         return $this->belongsToMany(Job::class, 'voucher_job');
+    }
+
+    public function submitteddocs()
+    {
+        return $this->hasMany(SubmittedDoc::class);
+    }
+
+    public function returnablelistdocs()
+    {
+        return $this->hasMany(ReturnableListDoc::class);
+    }
+
+    public function receiveddocs()
+    {
+        return $this->hasMany(ReceivedDoc::class);
+    }
+
+    public function sitecompletiondocs()
+    {
+        return $this->hasMany(SiteCompletionDoc::class);
     }
 }

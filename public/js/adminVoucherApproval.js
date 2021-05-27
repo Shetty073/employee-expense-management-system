@@ -37,6 +37,7 @@ $(document).on('click', '#approveVoucherBtn', function () {
     let payment_mode = $('#paymentMode').val();
     let amount = $('#totalAmountPaid').val();
     let remark = $('#remark').val();
+    let special_remark = $('#special_remark').val();
 
     let expense_remarks = {};
     let expense_amounts = {};
@@ -92,6 +93,7 @@ $(document).on('click', '#approveVoucherBtn', function () {
                         'payment_mode': payment_mode,
                         'amount': amount,
                         'remark': remark,
+                        'special_remark': special_remark,
                         'expense_remarks': expense_remarks,
                         'expense_amounts': expense_amounts,
                     }),
@@ -143,6 +145,7 @@ $(document).on('click', '#rejectVoucherBtn', function () {
     let voucherId = $('#voucherId').val();
     let csrft = $('meta[name="csrf-token"]').attr('content');
     let url = $('#url').val();
+    let special_remark = $('#special_remark').val();
 
     let expense_remarks = {};
     let expense_amounts = {};
@@ -194,6 +197,7 @@ $(document).on('click', '#rejectVoucherBtn', function () {
                     body: JSON.stringify({
                         'voucher_id': voucherId,
                         'status': 3,
+                        'special_remark': special_remark,
                         'expense_remarks': expense_remarks,
                         'expense_amounts': expense_amounts,
                     }),
