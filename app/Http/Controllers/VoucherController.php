@@ -85,16 +85,31 @@ class VoucherController extends Controller
             <body>';
 
         $content .= '
-            <div class="pull-right">
-                <img src="' . asset('logo/logo.jpg') . '" />
+            <div class="row">
+                <div class="text-center">
+                    <img src="' . asset('logo/logo.jpg') . '" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3"><b>Voucher Number: ' . $voucher->number . '</b></div>
             </div>';
 
         $content .= '
             <div class="row">
-                <div class="col-sm-3"><b>Employee Number:</b> ' . $voucher->number . '</div>
-                <div class="col-sm-3"><b>Employee Name:</b> ' . $voucher->employee()->first()->name . '</div>
-                <div class="col-sm-3"><b>Voucher Date:</b> ' . $voucher->date->format('d-M-Y') . '</div>
-                <div class="col-sm-3"><b>Voucher Jobs:</b> ';
+                <div class="col-xs-3"><b>Employee Name:</b> ' . $voucher->employee()->first()->name . '</div>
+                <div class="col-xs-3"><b>Employee Number:</b> ' . $voucher->employee()->first()->number . '</div>
+            </div>';
+
+        $content .= '
+            <div class="row">
+                <div class="col-xs-3"><b>Voucher Date:</b> ' . $voucher->date->format('d-M-Y') . '</div>
+                <div class="col-xs-3"><b>Approval Date:</b> ' . $voucher->approval_date->format('d-M-Y') . '</div>
+            </div>';
+
+        $content .= '
+        <div class="row">
+            <div class="col-xs-6"><b>Voucher Jobs:</b>
+        ';
 
         foreach ($voucherjobs as $job) {
             # code...
@@ -201,7 +216,7 @@ class VoucherController extends Controller
         </div>';
 
         $content .= '<div class="row">
-            <div class="form-group col-sm-4">
+            <div class="col-sm-3">
                 Site Completion: ';
 
         if (count($voucher->sitecompletiondocs) > 0) {
@@ -210,7 +225,7 @@ class VoucherController extends Controller
 
         $content .= '
             </div>
-            <div class="form-group col-sm-4">
+            <div class="col-sm-3">
                 Received Docs: ';
 
         if (count($voucher->receiveddocs) > 0) {
@@ -220,7 +235,7 @@ class VoucherController extends Controller
         $content .= '</div>
             </div>
             <div class="row">
-                <div class="form-group col-sm-4">
+                <div class="col-sm-3">
                     Returnable List: ';
 
         if (count($voucher->returnablelistdocs) > 0) {
@@ -228,7 +243,7 @@ class VoucherController extends Controller
         }
 
         $content .= '</div>
-            <div class="form-group col-sm-4">
+            <div class="col-sm-3">
                 Submitted Docs: ';
 
         if (count($voucher->submitteddocs) > 0) {
@@ -236,7 +251,7 @@ class VoucherController extends Controller
         }
 
         $content .= '</div>
-            </div>';
+            </div><br>';
 
         $content .= '<div class="table-responsive">
         <table class="table">

@@ -23,11 +23,16 @@
         @csrf
 
         <div class="row">
-            <div class="form-group col-sm-6">
-                <label for="voucherdate">Employee Name</label>
+            <div class="form-group col-sm-4">
+                <label for="employeename">Employee Name</label>
                 <input type="text" class="form-control" id="employeename" name="employeename" value="{{ $voucher->employee()->first()->name }}" disabled>
             </div>
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-4">
+                <label for="vouchernumber">Voucher Number</label>
+                <input type="text" class="form-control" id="vouchernumber" name="vouchernumber"
+                value="{{ $voucher->number }}" required disabled>
+            </div>
+            <div class="form-group col-sm-4">
                 <label for="voucherdate">Voucher Date</label>
                 <input type="date" class="form-control" id="voucherdate" name="voucherdate"
                 value="@if(isset($voucher)){{ $voucher->date->format('Y-m-d') }}@else{{ old('voucherdate') }}@endif" required disabled>
@@ -35,7 +40,7 @@
         </div>
         <div class="row">
             <div class="form-group col-sm-4">
-                <label for="job">Selected Job(s)</label>
+                <label for="job">Voucher Job(s)</label>
                 <select class="form-control js-example-basic-multiple" id="job" name="job[]" multiple="multiple" disabled>
                     <?php
                         $vouchers = $voucher->jobs()->get();
