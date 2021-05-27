@@ -18,6 +18,39 @@ $(document).on('click', '#downloadAllBillsBtn', function () {
     downloadBills(urls);
 });
 
+// download extra files attached at bottom
+$(document).on('click', '#siteCompletionDocBtn', function () {
+    let urls = [];
+    $('.site_completion_doc_url').each(function () {
+        urls.push($(this).text().trim());
+    });
+    downloadBills(urls);
+});
+
+$(document).on('click', '#receivedDocsBtn', function () {
+    let urls = [];
+    $('.received_doc_url').each(function () {
+        urls.push($(this).text().trim());
+    });
+    downloadBills(urls);
+});
+
+$(document).on('click', '#returnableListBtn', function () {
+    let urls = [];
+    $('.returnable_list_doc_url').each(function () {
+        urls.push($(this).text().trim());
+    });
+    downloadBills(urls);
+});
+
+$(document).on('click', '#submittedDocsBtn', function () {
+    let urls = [];
+    $('.submitted_doc_url').each(function () {
+        urls.push($(this).text().trim());
+    });
+    downloadBills(urls);
+});
+
 // total amount logic
 $(document).on('input', '.expenseamount', function () {
     let total = 0;

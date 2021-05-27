@@ -145,7 +145,16 @@
                         <td colspan="2" style="font-weight: 800;">
                             ₹ {{ $total_amt }}
                         </td>
-                        <td colspan="4"></td>
+                        @if($voucher->status !== 2)
+                            <td colspan="3"></td>
+                            <td>
+                                <button class="btn btn-primary" id="downloadAllBillsBtn">
+                                    Download All Bills
+                                </button>
+                            </td>
+                        @else
+                            <td colspan="4"></td>
+                        @endif
                     </tr>
                     <tr class="table-warning" style="font-size: 1.2rem;">
                         <td colspan="1" scope="row" style="font-weight: 800;">Wallet Balance:-</td>
@@ -156,6 +165,47 @@
                     </tr>
             </tbody>
         </table>
+    </div>
+    <br>
+
+    @foreach ($voucher->sitecompletiondocs as $doc)
+        <span class="site_completion_doc_url" hidden>
+            {{ asset('storage/site_completion_doc/' . $doc->file_name) }}
+        </span>
+    @endforeach
+    @foreach ($voucher->receiveddocs as $doc)
+        <span class="received_doc_url" hidden>
+            {{ asset('storage/received_doc/' . $doc->file_name) }}
+        </span>
+    @endforeach
+    @foreach ($voucher->returnablelistdocs as $doc)
+        <span class="returnable_list_doc_url" hidden>
+            {{ asset('storage/returnable_list_doc/' . $doc->file_name) }}
+        </span>
+    @endforeach
+    @foreach ($voucher->submitteddocs as $doc)
+        <span class="submitted_doc_url" hidden>
+            {{ asset('storage/submitted_doc/' . $doc->file_name) }}
+        </span>
+    @endforeach
+
+    <div class="row">
+        <div class="form-group col-sm-4">
+            <label for="siteCompletionDocBtn">Site Completion Docs: </label>
+            <button class="btn btn-secondary" id="siteCompletionDocBtn">Download Files</button>
+        </div>
+        <div class="form-group col-sm-4">
+            <label for="receivedDocsBtn">Received Docs: </label>
+            <button class="btn btn-secondary" id="receivedDocsBtn">Download Files</button>
+        </div>
+        <div class="form-group col-sm-4">
+            <label for="returnableListBtn">Returnable List: </label>
+            <button class="btn btn-secondary" id="returnableListBtn">Download Files</button>
+        </div>
+        <div class="form-group col-sm-4">
+            <label for="submittedDocsBtn">Submitted Docs: </label>
+            <button class="btn btn-secondary" id="submittedDocsBtn">Download Files</button>
+        </div>
     </div>
     <br>
 
@@ -229,6 +279,7 @@
             </div>
         </div>
         <br>
+
         <div class="row">
             <div class="col-sm-3">
                 <b>Special Remark: </b> {{ $voucher->special_remark }}
