@@ -61,6 +61,16 @@ $(document).on('input', '.expenseamount', function () {
     $('#totalAmountPaid').val(total);
 });
 
+// add more bills to expense
+$(document).on('click', '.addExpenseBillsBtn', function () {
+    let expenseId = $(this).prop('id');
+    $(document).on('change', `#billupload${expenseId}`, function () {
+        $(`#addExpenseBillsForm${expenseId}`).submit();
+    });
+    $(`#billupload${expenseId}`).click();
+
+});
+
 // save this voucher as draft with approved amounts etc.
 $(document).on('click', '#saveVoucherDraftBtn', function () {
     let voucherId = $('#voucherId').val();

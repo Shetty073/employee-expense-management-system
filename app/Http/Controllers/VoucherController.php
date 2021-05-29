@@ -454,6 +454,35 @@ class VoucherController extends Controller
         ]);
     }
 
+    public function addExpenseBills(Request $request)
+    {
+        $expenseId = $request->input('expenseid');
+        $expense = Expense::findorfail($expenseId);
+
+        if ($request->hasFile('bill')) {
+            $bills = $request->file('bill');
+
+            // Save the bill files
+            foreach ($bills as $billfile) {
+                $bill = Bill::create([
+                    'file_name' => '',
+                ]);
+                $fileName = $billfile->getClientOriginalName();
+                $fileExtension = $billfile->getClientOriginalExtension();
+                $fileName = chop($fileName, $fileExtension);
+                $fileNameToStore = $fileName . '_' . $bill->id . '_' . $expense->id . '_' . time() . '.' . $fileExtension;
+                $path = $billfile->storeAs('public/bill', $fileNameToStore);
+
+                $bill->file_name = $fileNameToStore;
+                $bill->expense()->associate($expense);
+                $bill->save();
+            }
+
+        }
+
+        return back();
+    }
+
     public function attachAdditionalFiles(Request $request, $id)
     {
         $voucher = Voucher::findorfail($id);

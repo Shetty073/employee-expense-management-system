@@ -114,9 +114,25 @@
                         </td>
                         <td>
                             @if(count($expense->bills) > 0)
-                                <button class="btn btn-primary downloadExpenseBillsBtn" id="{{ $expense->id }}">Download</button>
+                                <form id="addExpenseBillsForm{{ $expense->id }}" action="{{ route('vouchers.addExpenseBills') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-secondary downloadExpenseBillsBtn" id="{{ $expense->id }}">Download</button>
+                                        <input type="hidden" name="expenseid" value="{{ $expense->id }}">
+                                        <input type="file" name="bill[]" id="billupload{{ $expense->id }}" multiple hidden>
+                                        <button type="button" class="btn btn-primary addExpenseBillsBtn" id="{{ $expense->id }}">Add</button>
+                                    </div>
+                                </form>
                             @else
-                                <span class="badge badge-danger">Bill Not Provided</span>
+                                <form id="addExpenseBillsForm{{ $expense->id }}" action="{{ route('vouchers.addExpenseBills') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="btn-group" role="group">
+                                        <span class="badge badge-danger">Bill Not Provided</span>
+                                        <input type="hidden" name="expenseid" value="{{ $expense->id }}">
+                                        <input type="file" name="bill[]" id="billupload{{ $expense->id }}" multiple hidden>
+                                        <button type="button" class="btn btn-primary addExpenseBillsBtn" id="{{ $expense->id }}">Add</button>
+                                    </div>
+                                </form>
                             @endif
                         </td>
                     </tr>
