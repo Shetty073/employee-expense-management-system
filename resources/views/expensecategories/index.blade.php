@@ -33,7 +33,7 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item text-primary" href="{{ route('expensecategories.edit', ['id' => $expensecategory->id]) }}">Edit</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="{{ route('expensecategories.destroy', ['id' => $expensecategory->id]) }}">Delete</a>
+                                    <a class="dropdown-item text-danger deleteBtn" href="{{ route('expensecategories.destroy', ['id' => $expensecategory->id]) }}">Delete</a>
                                 </div>
                             </div>
                         </td>
@@ -49,8 +49,8 @@
 
 {{-- @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
-@stop
+@stop --}}
 
 @section('js')
-    <script> console.log('Hi!'); </script>
-@stop --}}
+    <script src="{{ asset('js/delete.js') }}"></script>
+@stop

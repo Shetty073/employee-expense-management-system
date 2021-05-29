@@ -263,23 +263,24 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         $employee = Employee::findorfail($id);
+        $user = $employee->user;
+        $user->active = false;
+        $user->save();
 
-        if ($employee->photo !== null) {
-            // Delete old photo file
-            $file_path = public_path('storage/employee/' . $employee->photo);
-            @unlink($file_path);
-        }
+        return response()->json([
+            'process' => 'success',
+        ]);
+    }
 
-        if ($employee->aadhar_photo !== null) {
-            // Delete old photo file
-            $file_path = public_path('storage/employee/' . $employee->aadhar_photo);
-            @unlink($file_path);
-        }
+    public function activate($id)
+    {
+        $employee = Employee::findorfail($id);
+        $user = $employee->user;
+        $user->active = true;
+        $user->save();
 
-        $employee->user()->first()->delete();
-
-        $employee->delete();
-
-        return redirect(route('employees.index'));
+        return response()->json([
+            'process' => 'success',
+        ]);
     }
 }

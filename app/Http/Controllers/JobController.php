@@ -99,6 +99,8 @@ class JobController extends Controller
         $job = Job::findorfail($id);
         $job->delete();
 
-        return redirect(route('jobs.index'));
+        return response()->json([
+            'process' => 'success',
+        ]);
     }
 }

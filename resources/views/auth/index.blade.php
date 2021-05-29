@@ -19,6 +19,7 @@
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Account</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -33,6 +34,21 @@
                                     {{ $user->email }}
                                 </td>
                                 <td>
+                                    @if ($user->active)
+                                        <span
+                                            class="badge badge-success px-2 py-2"
+                                            style="font-size: 1rem;">
+                                            Active
+                                        </span>
+                                    @else
+                                        <span
+                                            class="badge badge-danger px-2 py-2"
+                                            style="font-size: 1rem;">
+                                            Inactive
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
                                     <div class="dropdown">
                                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,7 +59,17 @@
                                             <a class="dropdown-item text-primary" href="{{ route('auth.edit', ['id' => $user->id]) }}">Edit</a>
                                             @if(auth()->user()->id !== $user->id)
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item text-danger" href="{{ route('auth.destroy', ['id' => $user->id]) }}">Delete</a>
+                                                @if($user->active)
+                                                    <a class="dropdown-item text-danger deactivateBtn"
+                                                        href="{{ route('auth.destroy', ['id' => $user->id]) }}">
+                                                        Deactivate
+                                                    </a>
+                                                @else
+                                                    <a class="dropdown-item text-success activateBtn"
+                                                        href="{{ route('auth.activate', ['id' => $user->id]) }}">
+                                                        Activate
+                                                    </a>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -54,8 +80,6 @@
                 </tbody>
             </table>
         </div>
-
-
     </div>
 
 @stop
@@ -66,5 +90,5 @@
 @endpush
 
 @section('js')
-    <script type="text/javascript" src="{{ asset('js/forms.js') }}"></script>
+    <script src="{{ asset('js/authactdeact.js') }}"></script>
 @stop

@@ -36,7 +36,7 @@
                                     <a class="dropdown-item text-primary"
                                         href="{{ route('jobs.edit', ['id' => $job->id]) }}">Edit</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger"
+                                    <a class="dropdown-item text-danger deleteBtn"
                                         href="{{ route('jobs.destroy', ['id' => $job->id]) }}">Delete</a>
                                 </div>
                             </div>
@@ -55,6 +55,6 @@
     <link rel="stylesheet" href="{{ asset('css/table.css') }}">
 @stop --}}
 
-{{-- @section('js')
-    <script> console.log('Hi!'); </script>
-@stop --}}
+@section('js')
+    <script src="{{ asset('js/delete.js') }}"></script>
+@stop

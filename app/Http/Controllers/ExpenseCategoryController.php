@@ -96,6 +96,8 @@ class ExpenseCategoryController extends Controller
         $expensecategory = ExpenseCategory::findorfail($id);
         $expensecategory->delete();
 
-        return redirect(route('expensecategories.index'));
+        return response()->json([
+            'process' => 'success',
+        ]);
     }
 }

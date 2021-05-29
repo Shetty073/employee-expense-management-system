@@ -347,18 +347,22 @@
         @elseif($voucher->status === 2)
             <div class="alert alert-success" role="alert">
                 This voucher has been approved!
-                <a href="{{ route('employees.voucherDetailsPdf', ['id' => $voucher->id]) }}"
-                    class="btn btn-secondary ml-2">
-                    <i class="fas fa-print"></i> Print Report
-                </a>
+                @if(auth()->user()->is_admin)
+                    <a href="{{ route('employees.voucherDetailsPdf', ['id' => $voucher->id]) }}"
+                        class="btn btn-secondary ml-2">
+                        <i class="fas fa-print"></i> Print Report
+                    </a>
+                @endif
             </div>
         @elseif($voucher->status === 3)
             <div class="alert alert-danger" role="alert">
                 This voucher has been rejected!
-                <a href="{{ route('employees.voucherDetailsPdf', ['id' => $voucher->id]) }}"
-                    class="btn btn-secondary ml-2">
-                    <i class="fas fa-print"></i> Download Report
-                </a>
+                @if(auth()->user()->is_admin)
+                    <a href="{{ route('employees.voucherDetailsPdf', ['id' => $voucher->id]) }}"
+                        class="btn btn-secondary ml-2">
+                        <i class="fas fa-print"></i> Print Report
+                    </a>
+                @endif
             </div>
         @endif
     </div>

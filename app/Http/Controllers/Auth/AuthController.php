@@ -31,6 +31,17 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
+        // Check if the user is marked as inactive, if they are then do not login and return back with errors
+        $user = User::where('email', $request->input('email'))->first();
+        if($user) {
+            if(!$user->active) {
+                return back()->withErrors([
+                    'email' => 'Your account is not active.',
+                    'password' => 'Please contact administrator for access.',
+                ]);
+            }
+        }
+
         $remember = false;
 
         if ($request->has('remember')) {
@@ -141,8 +152,22 @@ class AuthController extends Controller
     public function destroy($id)
     {
         $user = User::findorfail($id);
-        $user->delete();
+        $user->active = false;
+        $user->save();
 
-        return back();
+        return response()->json([
+            'process' => 'success',
+        ]);
+    }
+
+    public function activate($id)
+    {
+        $user = User::findorfail($id);
+        $user->active = true;
+        $user->save();
+
+        return response()->json([
+            'process' => 'success',
+        ]);
     }
 }

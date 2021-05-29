@@ -30,10 +30,11 @@ Route::group(['prefix' => '/auth'], function () {
     Route::get('/register', [AuthController::class, 'register'])->name('auth.register')->middleware('auth', 'can:admin');
     Route::post('/register', [AuthController::class, 'store'])->name('auth.store')->middleware('auth', 'can:admin');
 
-    Route::get('/{id}/edit', [AuthController::class, 'edit'])->name('auth.edit')->middleware('auth', 'can:admin');
-    Route::post('/{id}/update', [AuthController::class, 'update'])->name('auth.update')->middleware('auth', 'can:admin');
+    Route::get('/edit/{id}', [AuthController::class, 'edit'])->name('auth.edit')->middleware('auth', 'can:admin');
+    Route::post('/update/{id}', [AuthController::class, 'update'])->name('auth.update')->middleware('auth', 'can:admin');
 
-    Route::post('/{id}/destroy', [AuthController::class, 'destroy'])->name('auth.destroy')->middleware('auth', 'can:admin');
+    Route::post('/destroy/{id}', [AuthController::class, 'destroy'])->name('auth.destroy')->middleware('auth', 'can:admin');
+    Route::post('/activate/{id}', [AuthController::class, 'activate'])->name('auth.activate')->middleware('auth', 'can:admin');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
 });
@@ -51,7 +52,7 @@ Route::group(['prefix' => '/jobs', 'middleware' => ['auth', 'can:admin']], funct
     Route::get('/edit/{id}', [JobController::class, 'edit'])->name('jobs.edit');
     Route::post('/update/{id}', [JobController::class, 'update'])->name('jobs.update');
 
-    Route::get('/destroy/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
+    Route::post('/destroy/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
 });
 
 Route::group(['prefix' => '/expensecategories', 'middleware' => ['auth', 'can:admin']], function () {
@@ -62,7 +63,7 @@ Route::group(['prefix' => '/expensecategories', 'middleware' => ['auth', 'can:ad
     Route::get('/edit/{id}', [ExpenseCategoryController::class, 'edit'])->name('expensecategories.edit');
     Route::post('/update/{id}', [ExpenseCategoryController::class, 'update'])->name('expensecategories.update');
 
-    Route::get('/destroy/{id}', [ExpenseCategoryController::class, 'destroy'])->name('expensecategories.destroy');
+    Route::post('/destroy/{id}', [ExpenseCategoryController::class, 'destroy'])->name('expensecategories.destroy');
 });
 
 Route::group(['prefix' => '/employees', 'middleware' => ['auth']], function () {
@@ -76,7 +77,8 @@ Route::group(['prefix' => '/employees', 'middleware' => ['auth']], function () {
     Route::get('/addbalance/{id}', [EmployeeController::class, 'addbalance'])->name('employees.addbalance')->middleware('can:admin');
     Route::post('/addbalance/{id}', [EmployeeController::class, 'addbalance'])->name('employees.addbalance')->middleware('can:admin');
 
-    Route::get('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy')->middleware('can:admin');
+    Route::post('/destroy/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy')->middleware('can:admin');
+    Route::post('/activate/{id}', [EmployeeController::class, 'activate'])->name('employees.activate')->middleware('can:admin');
 
     Route::get('/vouchers', [VoucherController::class, 'approvalRequests'])->name('employees.approvalRequests')->middleware('can:admin');
     Route::get('/vouchers/approved', [VoucherController::class, 'approvedVouchers'])->name('employees.approvedVouchers');
