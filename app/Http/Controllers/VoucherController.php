@@ -415,6 +415,45 @@ class VoucherController extends Controller
         ]);
     }
 
+    public function voucherSaveDraft(Request $request)
+    {
+        // this will respond to fetch API request and based on data
+        // it will set the status of voucher to 2 (approved) or 3 (rejected)
+        $voucherId = json_decode($request->getContent(), true)['voucher_id'];
+        $special_remark = json_decode($request->getContent(), true)['special_remark'];
+        $expense_remarks = json_decode($request->getContent(), true)['expense_remarks'];
+        $expense_amounts = json_decode($request->getContent(), true)['expense_amounts'];
+
+        $voucher = Voucher::findorfail($voucherId);
+        $voucher->update([
+            'special_remark' => $special_remark,
+        ]);
+
+        // update the remarks for each expense if any
+        if(count($expense_remarks) > 0) {
+            foreach ($expense_remarks as $id => $remark) {
+                $expense = Expense::where('id', $id)->first();
+                $expense->update([
+                    'remark' => $remark,
+                ]);
+            }
+        }
+
+        // update the amount for each expense in case its changed
+        if(count($expense_amounts) > 0) {
+            foreach ($expense_amounts as $id => $amount) {
+                $expense = Expense::where('id', $id)->first();
+                $expense->update([
+                    'approved_amount' => $amount,
+                ]);
+            }
+        }
+
+        return response()->json([
+            'process' => 'success',
+        ]);
+    }
+
     public function attachAdditionalFiles(Request $request, $id)
     {
         $voucher = Voucher::findorfail($id);

@@ -61,6 +61,117 @@ $(document).on('input', '.expenseamount', function () {
     $('#totalAmountPaid').val(total);
 });
 
+// save this voucher as draft with approved amounts etc.
+$(document).on('click', '#saveVoucherDraftBtn', function () {
+    let voucherId = $('#voucherId').val();
+    let csrft = $('meta[name="csrf-token"]').attr('content');
+    let url = $('#voucherSaveDraftUrl').val();
+    let date = $('#date').val();
+    let payment_mode = $('#paymentMode').val();
+    let amount = $('#totalAmountPaid').val();
+    let remark = $('#remark').val();
+    let special_remark = $('#special_remark').val();
+
+    let expense_remarks = {};
+    let expense_amounts = {};
+
+    $('.expenseremark').each(function () {
+        let expenseRemark = $(this).val();
+        let expenseRemarkId = $(this).prop('id');
+
+        if(expenseRemark.trim() !== '') {
+            expense_remarks[expenseRemarkId] = expenseRemark;
+        }
+    });
+
+    $('.expenseamount').each(function () {
+        let expenseAmount = $(this).val();
+        let expenseAmountId = $(this).prop('id');
+        expense_amounts[expenseAmountId] = expenseAmount;
+    });
+
+
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger mr-2',
+        },
+        buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, save it!',
+        cancelButtonText: 'Cancel!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // perform fetch API call here
+            fetch(
+                url,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-Token': csrft,
+                    },
+                    body: JSON.stringify({
+                        'voucher_id': voucherId,
+                        'date': date,
+                        'payment_mode': payment_mode,
+                        'amount': amount,
+                        'remark': remark,
+                        'special_remark': special_remark,
+                        'expense_remarks': expense_remarks,
+                        'expense_amounts': expense_amounts,
+                    }),
+                },
+            ).then(function (response) {
+                if(response.status === 200) {
+                    return response.json();
+                } else {
+                    return {
+                        'process' : 'failed',
+                    };
+                }
+                // window.location.reload();
+            }).then(function (response) {
+                if(response.process === 'success') {
+                    // request succeeded
+                    swalWithBootstrapButtons.fire(
+                        'Saved!',
+                        'This draft has been saved.',
+                        'success'
+                    ).then(function (result) {
+                        window.location.reload();
+                    })
+                } else {
+                    // request failed
+                    swalWithBootstrapButtons.fire(
+                        'Failed!',
+                        'Request was not unsuccessful! Please contact the system administrator.',
+                        'error'
+                    );
+                }
+            });
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                'No action taken',
+                'The changes are not saved.',
+                'info'
+            );
+        }
+    });
+});
+
 // approve this voucher
 $(document).on('click', '#approveVoucherBtn', function () {
     let voucherId = $('#voucherId').val();

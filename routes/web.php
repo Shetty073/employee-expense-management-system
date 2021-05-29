@@ -84,6 +84,7 @@ Route::group(['prefix' => '/employees', 'middleware' => ['auth', 'can:admin']], 
     Route::get('/vouchers/details/{id}', [VoucherController::class, 'voucherDetails'])->name('employees.voucherDetails');
     Route::get('/vouchers/pdf/{id}', [VoucherController::class, 'voucherDetailsPdf'])->name('employees.voucherDetailsPdf');
     Route::post('/vouchers/approvereject', [VoucherController::class, 'voucherApproveReject'])->name('vouchers.voucherApproveReject');
+    Route::post('/vouchers/savedraft', [VoucherController::class, 'voucherSaveDraft'])->name('vouchers.voucherSaveDraft');
 });
 
 Route::group(['prefix' => '/vouchers', 'middleware' => ['auth', 'can:employee']], function () {

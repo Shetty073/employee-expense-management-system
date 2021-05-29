@@ -95,7 +95,8 @@
                         <td class="data">
                             @if($voucher->status === 1)
                                 <span class="badge badge-primary px-2 py-2">
-                                    ₹ <input type="number" class="expenseamount" id="{{ $expense->id }}" value="{{ $expense->amount }}">
+                                    ₹ <input type="number" class="expenseamount" id="{{ $expense->id }}"
+                                    value="@if(!$expense->approved_amount){{ $expense->amount }}@else{{ $expense->approved_amount }}@endif">
                                 </span>
                             @else
                                 <span class="badge badge-primary px-2 py-2">
@@ -229,9 +230,19 @@
         <br>
         <form>
             <div class="row">
+                <?php
+                    $total_approved_amt = 0.0;
+                    foreach ($expenses as $exp) {
+                        $total_approved_amt += $exp->approved_amount;
+                    }
+
+                    if(!$total_approved_amt) {
+                        $total_approved_amt = $total_amt;
+                    }
+                ?>
                 <div class="col-sm-4">
                     <label for="totalAmountPaid">Total Approved Amount:</label>
-                    <input type="number" id="totalAmountPaid" class="form-control" value="{{ $total_amt }}">
+                    <input type="number" id="totalAmountPaid" class="form-control" value="{{ $total_approved_amt }}">
                 </div>
                 <div class="col-sm-4">
                     <label for="paymentMode">Payment Mode:</label>
@@ -304,6 +315,9 @@
                 Approval is not yet requested by the author of this voucher!
             </div>
         @elseif($voucher->status === 1)
+            <button class="btn btn-warning" id="saveVoucherDraftBtn">
+                <i class="fas fa-save"></i> Save Draft
+            </button>
             <button class="btn btn-success" id="approveVoucherBtn">
                 <i class="fas fa-check"></i> Approve
             </button>
@@ -333,6 +347,7 @@
 
 <input type="hidden" id="voucherId" value="{{ $voucher->id }}">
 <input type="hidden" id="url" value="{{ route('vouchers.voucherApproveReject') }}">
+<input type="hidden" id="voucherSaveDraftUrl" value="{{ route('vouchers.voucherSaveDraft') }}">
 @stop
 
 @section('js')
