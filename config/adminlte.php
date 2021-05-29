@@ -244,6 +244,12 @@ return [
             'can'         => 'admin',
         ],
         [
+            'text'        => 'Open Vouchers',
+            'url'         => '/vouchers',
+            'icon'        => 'fas fa-fw fa-users-cog',
+            'can'         => 'employee',
+        ],
+        [
             'text'        => 'Approval Requests',
             'url'         => '/employees/vouchers',
             'icon'        => 'fas fa-fw fa-list',
@@ -253,13 +259,13 @@ return [
             'text'        => 'Approved Vouchers',
             'url'         => '/employees/vouchers/approved',
             'icon'        => 'fas fa-fw fa-check-circle',
-            'can'         => 'admin',
+            'can'         => ['admin', 'employee'],
         ],
         [
             'text'        => 'Rejected Vouchers',
             'url'         => '/employees/vouchers/rejected',
             'icon'        => 'fas fa-fw fa-times-circle',
-            'can'         => 'admin',
+            'can'         => ['admin', 'employee'],
         ],
         [
             'text'        => 'Payments',
@@ -284,13 +290,6 @@ return [
             'url'         => '/auth/index',
             'icon'        => 'fas fa-fw fa-users-cog',
             'can'         => 'admin',
-        ],
-        // Employee links
-        [
-            'text'        => 'Vouchers',
-            'url'         => '/vouchers',
-            'icon'        => 'fas fa-fw fa-users-cog',
-            'can'         => 'employee',
         ],
         [
             'text'        => 'Wallet',

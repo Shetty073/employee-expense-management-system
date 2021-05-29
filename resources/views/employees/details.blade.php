@@ -120,7 +120,9 @@
                                         <button type="button" class="btn btn-secondary downloadExpenseBillsBtn" id="{{ $expense->id }}">Download</button>
                                         <input type="hidden" name="expenseid" value="{{ $expense->id }}">
                                         <input type="file" name="bill[]" id="billupload{{ $expense->id }}" multiple hidden>
-                                        <button type="button" class="btn btn-primary addExpenseBillsBtn" id="{{ $expense->id }}">Add</button>
+                                        @if($voucher->status < 2)
+                                            <button type="button" class="btn btn-primary addExpenseBillsBtn" id="{{ $expense->id }}">Add</button>
+                                        @endif
                                     </div>
                                 </form>
                             @else
@@ -130,7 +132,9 @@
                                         <span class="badge badge-danger">Bill Not Provided</span>
                                         <input type="hidden" name="expenseid" value="{{ $expense->id }}">
                                         <input type="file" name="bill[]" id="billupload{{ $expense->id }}" multiple hidden>
-                                        <button type="button" class="btn btn-primary addExpenseBillsBtn" id="{{ $expense->id }}">Add</button>
+                                        @if($voucher->status < 2)
+                                            <button type="button" class="btn btn-primary addExpenseBillsBtn" id="{{ $expense->id }}">Add</button>
+                                        @endif
                                     </div>
                                 </form>
                             @endif

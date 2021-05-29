@@ -581,7 +581,7 @@ class VoucherController extends Controller
      */
     public function index()
     {
-        $vouchers = Voucher::where('employee_id', auth()->user()->employee->id)->get();
+        $vouchers = Voucher::where('employee_id', auth()->user()->employee->id)->where('status', 1)->get();
 
         return view('vouchers.index', compact('vouchers'));
     }
