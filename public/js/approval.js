@@ -15,9 +15,7 @@ $(document).on('click', '.editExpenseBtn', function (e) {
         $(`.billurl.${selectedExpenseId}`).each(function () {
             urls.push($(this).text().trim());
         });
-        // downloadBills(urls);
-        console.log({selectedExpenseId});
-        console.log({urls});
+        downloadBills(urls);
 
         return;
     }
