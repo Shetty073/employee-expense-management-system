@@ -49,7 +49,7 @@ class JobController extends Controller
             'number' => $request->input('number'),
         ]);
 
-        return redirect(route('jobs.index'));
+        return back();
     }
 
     /**

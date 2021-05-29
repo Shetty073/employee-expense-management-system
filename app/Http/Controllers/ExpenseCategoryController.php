@@ -47,7 +47,7 @@ class ExpenseCategoryController extends Controller
             'name' => $request->input('name')
         ]);
 
-        return redirect(route('expensecategories.index'));
+        return back();
     }
 
     /**

@@ -12,10 +12,12 @@ $(document).on('click', '.editExpenseBtn', function (e) {
     if ($(e.target).closest('td').is(':nth-child(7)')) {
         // download bills
         let urls = [];
-        $(`.billurl, .${selectedExpenseId}`).each(function () {
+        $(`.billurl.${selectedExpenseId}`).each(function () {
             urls.push($(this).text().trim());
         });
-        downloadBills(urls);
+        // downloadBills(urls);
+        console.log({selectedExpenseId});
+        console.log({urls});
 
         return;
     }

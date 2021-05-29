@@ -2,7 +2,7 @@
 $(document).on('click', '.downloadExpenseBillsBtn', function () {
     let id = $(this).prop('id');
     let urls = [];
-    $(`.billurl, ${id}`).each(function () {
+    $(`.billurl.${id}`).each(function () {
         urls.push($(this).text().trim());
     });
 
