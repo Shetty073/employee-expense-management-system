@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `employee_payment_wallet_system` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `employee_payment_wallet_system`;
 USE `employee_payment_wallet_system`;
 -- MySQL dump 10.13  Distrib 8.0.24, for Win64 (x86_64)
 --
@@ -402,6 +402,7 @@ CREATE TABLE `users` (
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `active` tinyint(1) NOT NULL DEFAULT '1',
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -416,7 +417,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Ashish Shetty','ashish@example.com',NULL,'$2y$10$lrOH83zS.GoQ9erD5F0yUOUQ.8tzBHisseZzibbxdoZjMhUFet4jm',1,'5Ne82jJXhnLcKKcspUYZmmRiMlYyqoyzPDzKSbGNsHyt4n74w9o1CycB2TVy','2021-05-20 02:51:48','2021-05-20 09:45:16');
+INSERT INTO `users` VALUES (1,'Ashish Shetty','ashish@example.com',NULL,'$2y$10$lrOH83zS.GoQ9erD5F0yUOUQ.8tzBHisseZzibbxdoZjMhUFet4jm',1,1,'YFXVIB6YtcLJF7TtJlobYOOxw5mrBXAb2VEAAM5SzmgjThywIMvfBT8pl8Cf','2021-05-20 02:51:48','2021-05-20 09:45:16');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -492,4 +493,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-27 15:56:34
+-- Dump completed on 2021-05-30 12:29:31
