@@ -383,6 +383,7 @@ class VoucherController extends Controller
             $payment->save();
 
             $voucher->approved_amount = $amount;
+            $voucher->addprovedBy()->associate(auth()->user());
             $voucher->save();
         }
 

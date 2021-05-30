@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Employee::class);
     }
+
+    public function approvedVouchers()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }

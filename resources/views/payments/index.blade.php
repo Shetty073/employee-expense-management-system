@@ -13,6 +13,8 @@
     <br><br><br>
 
     <div class="card px-3 py-1">
+        <input type="text" id="searchBox" placeholder="🔍 Search the table below">
+        <br>
 
         <div class="table-responsive">
             <table class="table">
@@ -57,8 +59,8 @@
 
 {{-- @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
-@stop
+@stop --}}
 
 @section('js')
-    <script> console.log('Hi!'); </script>
-@stop --}}
+    <script src="{{ asset('js/tableFilter.js') }}"></script>
+@stop

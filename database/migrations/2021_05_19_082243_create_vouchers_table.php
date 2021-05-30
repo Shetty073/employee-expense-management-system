@@ -22,6 +22,7 @@ class CreateVouchersTable extends Migration
             $table->decimal('approved_amount')->nullable();
             $table->integer('status')->default(0);
             $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('CASCADE');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('CASCADE');
             $table->timestamps();
         });
     }

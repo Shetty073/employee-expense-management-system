@@ -22,6 +22,7 @@
                         <th scope="col">Proposed Amount</th>
                         <th scope="col">Approved Amount</th>
                         <th scope="col">Approved On</th>
+                        <th scope="col">Approved By</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -55,6 +56,7 @@
                             </span>
                         </td>
                         <td>{{ $voucher->approval_date->format('d-M-Y') }}</td>
+                        <td>{{ $voucher->addprovedBy->name }}</td>
                         <td>
                             <a class="btn btn-primary" href="{{ route('employees.voucherDetails', ['id' => $voucher->id]) }}">View</a>
                         </td>

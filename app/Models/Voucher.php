@@ -34,6 +34,11 @@ class Voucher extends Model
         return $this->belongsTo(Employee::class);
     }
 
+    public function addprovedBy()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function jobs()
     {
         return $this->belongsToMany(Job::class, 'voucher_job');
