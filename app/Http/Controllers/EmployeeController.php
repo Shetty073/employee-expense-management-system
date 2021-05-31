@@ -108,7 +108,7 @@ class EmployeeController extends Controller
         $user->employee()->save($employee);
         $user->save();
 
-        return redirect(route('employees.index'));
+        return back();
     }
 
     public function addbalance(Request $request, $id)

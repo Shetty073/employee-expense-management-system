@@ -93,6 +93,7 @@ Route::group(['prefix' => '/employees', 'middleware' => ['auth']], function () {
 
 Route::group(['prefix' => '/vouchers', 'middleware' => ['auth', 'can:employee']], function () {
     Route::get('/', [VoucherController::class, 'index'])->name('vouchers.index');
+    Route::get('/draft', [VoucherController::class, 'draft'])->name('vouchers.draft');
     Route::get('/create', [VoucherController::class, 'create'])->name('vouchers.create');
     Route::post('/store', [VoucherController::class, 'store'])->name('vouchers.store');
 

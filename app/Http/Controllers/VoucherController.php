@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bill;
+use App\Models\Employee;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\Job;
@@ -20,21 +21,36 @@ class VoucherController extends Controller
 {
     public function approvalRequests()
     {
-        $vouchers = Voucher::where('status', 1)->get();
+        if(auth()->user()->is_admin) {
+            $vouchers = Voucher::where('status', 1)->get();
+        } else {
+            $employee = Employee::where('user_id', auth()->user()->id)->first();
+            $vouchers = Voucher::where('status', 1)->where('employee_id', $employee->id)->get();
+        }
 
         return view('employees.approval', compact('vouchers'));
     }
 
     public function approvedVouchers()
     {
-        $vouchers = Voucher::where('status', 2)->get();
+        if(auth()->user()->is_admin) {
+            $vouchers = Voucher::where('status', 2)->get();
+        } else {
+            $employee = Employee::where('user_id', auth()->user()->id)->first();
+            $vouchers = Voucher::where('status', 2)->where('employee_id', $employee->id)->get();
+        }
 
         return view('employees.approved', compact('vouchers'));
     }
 
     public function rejectedVouchers()
     {
-        $vouchers = Voucher::where('status', 3)->get();
+        if(auth()->user()->is_admin) {
+            $vouchers = Voucher::where('status', 3)->get();
+        } else {
+            $employee = Employee::where('user_id', auth()->user()->id)->first();
+            $vouchers = Voucher::where('status', 3)->where('employee_id', $employee->id)->get();
+        }
 
         return view('employees.rejected', compact('vouchers'));
     }
@@ -585,6 +601,13 @@ class VoucherController extends Controller
         $vouchers = Voucher::where('employee_id', auth()->user()->employee->id)->where('status', 1)->get();
 
         return view('vouchers.index', compact('vouchers'));
+    }
+
+    public function draft()
+    {
+        $vouchers = Voucher::where('employee_id', auth()->user()->employee->id)->where('status', 0)->get();
+
+        return view('vouchers.draft', compact('vouchers'));
     }
 
     /**

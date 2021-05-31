@@ -32,9 +32,15 @@
                     <tr>
                         <td style="font-weight: 700;">{{ $payment->employee()->first()->name }}</td>
                         <td>
-                            <span class="badge badge-primary px-2 py-2" style="font-size: 1rem;">
-                                ₹ {{ $payment->amount }}
-                            </span>
+                            @if(strpos($payment->remark, 'Voucher Accepted') !== false)
+                                <span class="badge badge-success px-2 py-2" style="font-size: 1rem;">
+                                    ₹ -{{ $payment->amount }}
+                                </span>
+                            @else
+                                <span class="badge badge-primary px-2 py-2" style="font-size: 1rem;">
+                                    ₹ {{ $payment->amount }}
+                                </span>
+                            @endif
                         </td>
                         <td>
                             <span class="badge badge-warning px-2 py-2" style="font-size: 1rem;">

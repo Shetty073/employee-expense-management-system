@@ -244,6 +244,12 @@ return [
             'can'         => 'admin',
         ],
         [
+            'text'        => 'Draft Vouchers',
+            'url'         => '/vouchers/draft',
+            'icon'        => 'fas fa-fw fa-save',
+            'can'         => 'employee',
+        ],
+        [
             'text'        => 'Open Vouchers',
             'url'         => '/vouchers',
             'icon'        => 'fas fa-fw fa-users-cog',
