@@ -8,7 +8,7 @@
 
 @section('content')
 
-    <p class="float-left">List of all of your vouchers is visible here.</p>
+    <p class="float-left">List of all of your open vouchers is visible here.</p>
     <div class="float-right">
         <a href="{{ route('vouchers.create') }}" class="btn btn-primary">+ Create New Voucher</a>
     </div>
@@ -46,17 +46,7 @@
                             </span>
                         </td>
                         <td>
-                            <div class="dropdown">
-                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    ACTIONS
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item text-primary" href="{{ route('vouchers.edit', ['id' => $voucher->id]) }}">Edit</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="{{ route('vouchers.destroy', ['id' => $voucher->id]) }}">Delete</a>
-                                </div>
-                            </div>
+                            <a class="btn btn-primary" href="{{ route('vouchers.edit', ['id' => $voucher->id]) }}">View</a>
                         </td>
                     </tr>
                     @endforeach

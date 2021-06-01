@@ -161,7 +161,11 @@
                             @if ($voucher->approved_amount)
                                 ₹ {{ $voucher->approved_amount }}
                             @else
-                                Not Yet Approved
+                                @if($voucher->status === 3)
+                                    Rejected!
+                                @else
+                                    Not Yet Approved
+                                @endif
                             @endif
                         </td>
                         <td colspan="2"></td>

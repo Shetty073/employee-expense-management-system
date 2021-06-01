@@ -26,7 +26,8 @@
         <div class="row">
             <div class="form-group col-sm-4">
                 <label for="job">Select Job</label>
-                <select class="form-control js-example-basic-multiple" id="job" name="job[]" multiple="multiple">
+                <select class="form-control js-example-basic-multiple" id="job" name="job[]"
+                 multiple="multiple" @if($voucher->status !== 0)disabled @endif>
                     <?php
                         $vouchers = $voucher->jobs()->get();
                         $voucherids = array();
@@ -40,6 +41,11 @@
                         </option>
                     @endforeach
                 </select>
+            </div>
+            <div class="form-group col-sm-4">
+                <label for="vouchernumber">Voucher Number</label>
+                <input type="text" class="form-control" id="vouchernumber" name="vouchernumber"
+                value="{{ $voucher->number }}" required disabled>
             </div>
         </div>
 
