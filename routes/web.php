@@ -91,23 +91,23 @@ Route::group(['prefix' => '/employees', 'middleware' => ['auth']], function () {
     Route::post('/vouchers/expense/addbills', [VoucherController::class, 'addExpenseBills'])->name('vouchers.addExpenseBills')->middleware('can:admin');
 });
 
-Route::group(['prefix' => '/vouchers', 'middleware' => ['auth', 'can:employee']], function () {
-    Route::get('/', [VoucherController::class, 'index'])->name('vouchers.index');
-    Route::get('/draft', [VoucherController::class, 'draft'])->name('vouchers.draft');
-    Route::get('/create', [VoucherController::class, 'create'])->name('vouchers.create');
-    Route::post('/store', [VoucherController::class, 'store'])->name('vouchers.store');
+Route::group(['prefix' => '/vouchers', 'middleware' => 'auth'], function () {
+    Route::get('/', [VoucherController::class, 'index'])->name('vouchers.index')->middleware('can:employee');
+    Route::get('/draft', [VoucherController::class, 'draft'])->name('vouchers.draft')->middleware('can:employee');
+    Route::get('/create', [VoucherController::class, 'create'])->name('vouchers.create')->middleware('can:employee');
+    Route::post('/store', [VoucherController::class, 'store'])->name('vouchers.store')->middleware('can:employee');
 
-    Route::get('/edit/{id}', [VoucherController::class, 'edit'])->name('vouchers.edit');
-    Route::post('/update/{id}', [VoucherController::class, 'update'])->name('vouchers.update');
+    Route::get('/edit/{id}', [VoucherController::class, 'edit'])->name('vouchers.edit')->middleware('can:employee');
+    Route::post('/update/{id}', [VoucherController::class, 'update'])->name('vouchers.update')->middleware('can:employee');
 
-    Route::post('/createExpense/{id}', [VoucherController::class, 'createExpense'])->name('vouchers.createExpense');
-    Route::post('/updateExpense/{id}', [VoucherController::class, 'updateExpense'])->name('vouchers.updateExpense');
-    Route::post('/destroyExpense', [VoucherController::class, 'destroyExpense'])->name('vouchers.destroyExpense');
+    Route::post('/createExpense/{id}', [VoucherController::class, 'createExpense'])->name('vouchers.createExpense')->middleware('can:employee');
+    Route::post('/updateExpense/{id}', [VoucherController::class, 'updateExpense'])->name('vouchers.updateExpense')->middleware('can:employee');
+    Route::post('/destroyExpense', [VoucherController::class, 'destroyExpense'])->name('vouchers.destroyExpense')->middleware('can:employee');
     Route::post('/attachAdditionalFiles/{id}', [VoucherController::class, 'attachAdditionalFiles'])->name('vouchers.attachAdditionalFiles');
 
-    Route::post('/askForApproval', [VoucherController::class, 'askForApproval'])->name('vouchers.askForApproval');
+    Route::post('/askForApproval', [VoucherController::class, 'askForApproval'])->name('vouchers.askForApproval')->middleware('can:employee');
 
-    Route::get('/destroy/{id}', [VoucherController::class, 'destroy'])->name('vouchers.destroy');
+    Route::get('/destroy/{id}', [VoucherController::class, 'destroy'])->name('vouchers.destroy')->middleware('can:employee');
 });
 
 Route::group(['prefix' => '/payments', 'middleware' => ['auth', 'can:admin']], function () {

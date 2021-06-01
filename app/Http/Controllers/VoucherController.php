@@ -34,10 +34,10 @@ class VoucherController extends Controller
     public function approvedVouchers()
     {
         if(auth()->user()->is_admin) {
-            $vouchers = Voucher::where('status', 2)->get();
+            $vouchers = Voucher::where('status', 2)->get()->sortByDesc('approval_date');
         } else {
             $employee = Employee::where('user_id', auth()->user()->id)->first();
-            $vouchers = Voucher::where('status', 2)->where('employee_id', $employee->id)->get();
+            $vouchers = Voucher::where('status', 2)->where('employee_id', $employee->id)->get()->sortByDesc('approval_date');
         }
 
         return view('employees.approved', compact('vouchers'));
@@ -46,10 +46,10 @@ class VoucherController extends Controller
     public function rejectedVouchers()
     {
         if(auth()->user()->is_admin) {
-            $vouchers = Voucher::where('status', 3)->get();
+            $vouchers = Voucher::where('status', 3)->get()->sortByDesc('approval_date');
         } else {
             $employee = Employee::where('user_id', auth()->user()->id)->first();
-            $vouchers = Voucher::where('status', 3)->where('employee_id', $employee->id)->get();
+            $vouchers = Voucher::where('status', 3)->where('employee_id', $employee->id)->get()->sortByDesc('approval_date');
         }
 
         return view('employees.rejected', compact('vouchers'));

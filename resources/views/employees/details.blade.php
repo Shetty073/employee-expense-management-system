@@ -208,6 +208,7 @@
         </span>
     @endforeach
 
+    <h5 style="font-weight: 700;">Extra docs submitted</h5>
     <div class="row">
         <div class="form-group col-sm-3">
             <label for="siteCompletionDocBtn">Site Completion Docs: </label>
@@ -244,14 +245,59 @@
     </div>
     <br>
 
+    <h5 style="font-weight: 700;">Add extra docs</h5>
+    <form method="POST"
+        action="{{ route('vouchers.attachAdditionalFiles', ['id' => $voucher->id]) }}" enctype="multipart/form-data">
+            @if ($errors->any())
+                <div class="border border-danger text-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @csrf
+
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="site_completion">Site Completion</label>
+                    <input type="file" class="form-control" id="site_completion" name="site_completion[]" multiple>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="received_docs">Received Docs</label>
+                    <input type="file" class="form-control" id="received_docs" name="received_docs[]" multiple>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="returnable_list">Returnable List</label>
+                    <input type="file" class="form-control" id="returnable_list" name="returnable_list[]" multiple>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="submitted_docs">Submitted Docs</label>
+                    <input type="file" class="form-control" id="submitted_docs" name="submitted_docs[]" multiple>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <button class="btn btn-success" type="submit">+ Add docs</button>
+                </div>
+            </div>
+        </form>
+
+        <hr>
+
     @if($voucher->status === 1)
         <div class="row">
             <div class="col-sm-4">
-                <label for="special_remark">Special Remark:</label>
+                <label for="special_remark">Voucher Special Remark:</label>
                 <input type="text" id="special_remark" class="form-control">
             </div>
         </div>
-        <br>
+        <br><hr>
+        <h5 style="font-weight: 700;">Payment options</h5>
         <form>
             <div class="row">
                 <?php
@@ -280,12 +326,12 @@
             </div>
             <div class="row">
                 <div class="form-group col-sm-4">
-                    <label for="date">Date</label>
+                    <label for="date">Payment Date</label>
                     <input type="date" class="form-control" id="date" name="date"
                     value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
                 </div>
                 <div class="form-group col-sm-4">
-                    <label for="remark">Remark</label>
+                    <label for="remark">Payment Remark</label>
                     <input type="text" class="form-control" id="remark" name="remark" required>
                 </div>
             </div>

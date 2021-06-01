@@ -249,7 +249,7 @@ class EmployeeController extends Controller
 
     public function wallet()
     {
-        $payments = auth()->user()->employee->payments;
+        $payments = auth()->user()->employee->payments->sortByDesc('date');
 
         return view('wallet.index', compact('payments'));
     }
