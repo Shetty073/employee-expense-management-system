@@ -82,7 +82,7 @@ class AuthController extends Controller
             'is_admin' => true,
         ]);
 
-        return back();
+        return redirect(route('auth.index'));
     }
 
     public function logout(Request $request)
