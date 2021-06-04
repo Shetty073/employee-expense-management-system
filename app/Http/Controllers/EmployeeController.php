@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Accunity\Utils;
 use App\Models\Employee;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class EmployeeController extends Controller
 {
@@ -119,16 +121,17 @@ class EmployeeController extends Controller
                 'wallet_balance' => 'required',
             ]);
 
+            $balance = $request->input('wallet_balance');
             // add balance to employee's account
             $employee = Employee::findorfail($id);
-            $wallet_balance = $employee->wallet_balance + $request->input('wallet_balance');
+            $wallet_balance = $employee->wallet_balance + $balance;
             $employee->wallet_balance = $wallet_balance;
             $employee->save();
 
             $payment = Payment::create([
                 'date' => $request->input('date'),
                 'payment_mode' => $request->input('payment_mode'),
-                'amount' => $request->input('wallet_balance'),
+                'amount' => $balance,
             ]);
 
             if ($request->input('remark') == null) {
@@ -138,6 +141,16 @@ class EmployeeController extends Controller
             }
             $payment->employee()->associate($employee);
             $payment->save();
+
+            // Send email to employee regarding balance update
+            $data = [
+                'employee' => $employee,
+                'balance' => $balance,
+            ];
+            Mail::send('emails.addbalancemail', $data, function($message) use ($employee) {
+                $message->to($employee->email, $employee->name)->subject('Balance added to your account');
+                $message->from(Utils::SENDER_EMAIL, Utils::SENDER_NAME);
+            });
 
             return redirect(route('employees.index'));
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Accunity\Utils;
 use App\Models\Bill;
 use App\Models\Employee;
 use App\Models\Expense;
@@ -16,6 +17,7 @@ use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Mail;
 
 class VoucherController extends Controller
 {
@@ -371,6 +373,9 @@ class VoucherController extends Controller
 
         $employee = $voucher->employee()->first();
 
+        $emailsubject = 'Your voucher has been rejected';
+        $emailmessage = 'We are sorry to inform you that your voucher numbered ' . $voucher->number . ' has been rejected.';
+
         if($status == 2) {
             $date = json_decode($request->getContent(), true)['date'];
             $payment_mode = json_decode($request->getContent(), true)['payment_mode'];
@@ -396,6 +401,9 @@ class VoucherController extends Controller
             $voucher->approved_amount = $amount;
             $voucher->addprovedBy()->associate(auth()->user());
             $voucher->save();
+
+            $emailsubject = 'Your voucher has been accepted';
+            $emailmessage = 'We are happy to inform you that your voucher numbered ' . $voucher->number . ' has been accepted.';
         }
 
         // update the remarks for each expense if any
@@ -421,6 +429,17 @@ class VoucherController extends Controller
         // Note: approval_date can be treated as rejection_date for rejected vouchers
         $voucher->approval_date = Carbon::now();
         $voucher->save();
+
+        // Send email to employee regarding voucher status update
+        $data = [
+            'employee' => $employee,
+            'voucher' => $voucher,
+            'emailmessage' => $emailmessage,
+        ];
+        Mail::send('emails.voucherstatus', $data, function($message) use ($employee, $emailsubject) {
+            $message->to($employee->email, $employee->name)->subject($emailsubject);
+            $message->from(Utils::SENDER_EMAIL, Utils::SENDER_NAME);
+        });
 
         return response()->json([
             'process' => 'success',
@@ -824,9 +843,20 @@ class VoucherController extends Controller
         // Set voucher status = 1 (Waiting For Approval)
         $voucherId = json_decode($request->getContent(), true)['voucher_id'];
         $voucher = Voucher::findorfail($voucherId);
+        $employee = $voucher->employee;
         $voucher->update([
             'status' => 1,
         ]);
+
+        // Send email to employee regarding voucher sent for approval
+        $data = [
+            'employee' => $employee,
+            'voucher' => $voucher,
+        ];
+        Mail::send('emails.askforapproval', $data, function($message) use ($employee) {
+            $message->to($employee->email, $employee->name)->subject('Voucher sent for approval');
+            $message->from(Utils::SENDER_EMAIL, Utils::SENDER_NAME);
+        });
 
         return response()->json([
             'process' => 'success',
