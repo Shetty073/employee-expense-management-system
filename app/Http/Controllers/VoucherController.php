@@ -387,13 +387,8 @@ class VoucherController extends Controller
                 'date' => $date,
                 'payment_mode' => $payment_mode,
                 'amount' => $amount,
+                'remark' => 'Voucher Accepted - ' . $special_remark,
             ]);
-
-            if ($request->input('remark') == null) {
-                $payment->remark = 'Voucher Accepted';
-            } else {
-                $payment->remark = 'Voucher Accepted - ' . $remark;
-            }
 
             $payment->employee()->associate($employee);
             $payment->save();
