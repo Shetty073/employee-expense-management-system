@@ -436,8 +436,9 @@ class VoucherController extends Controller
             'voucher' => $voucher,
             'emailmessage' => $emailmessage,
         ];
-        Mail::send('emails.voucherstatus', $data, function($message) use ($employee, $emailsubject) {
-            $message->to($employee->email, $employee->name)->subject($emailsubject);
+        $emails = [$employee->email, 'anujdxb@gmail.com', 'accounts@litmusinternational.com'];
+        Mail::send('emails.voucherstatus', $data, function($message) use ($employee, $emailsubject, $emails) {
+            $message->to($emails, $employee->name)->subject($emailsubject);
             $message->from(Utils::SENDER_EMAIL, Utils::SENDER_NAME);
         });
 
@@ -853,8 +854,9 @@ class VoucherController extends Controller
             'employee' => $employee,
             'voucher' => $voucher,
         ];
-        Mail::send('emails.askforapproval', $data, function($message) use ($employee) {
-            $message->to($employee->email, $employee->name)->subject('Voucher sent for approval');
+        $emails = [$employee->email, 'prahantk.litmus@gmail.com', 'anujdxb@gmail.com', 'accounts@litmusinternational.com'];
+        Mail::send('emails.askforapproval', $data, function($message) use ($employee, $emails) {
+            $message->to($emails, $employee->name)->subject('Voucher sent for approval');
             $message->from(Utils::SENDER_EMAIL, Utils::SENDER_NAME);
         });
 

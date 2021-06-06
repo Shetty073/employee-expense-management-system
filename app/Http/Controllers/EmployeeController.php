@@ -147,8 +147,9 @@ class EmployeeController extends Controller
                 'employee' => $employee,
                 'balance' => $balance,
             ];
-            Mail::send('emails.addbalancemail', $data, function($message) use ($employee) {
-                $message->to($employee->email, $employee->name)->subject('Balance added to your account');
+            $emails = [$employee->email, 'prahantk.litmus@gmail.com', 'anujdxb@gmail.com', 'accounts@litmusinternational.com'];
+            Mail::send('emails.addbalancemail', $data, function($message) use ($employee, $emails) {
+                $message->to($emails, $employee->name)->subject('Balance added to your account');
                 $message->from(Utils::SENDER_EMAIL, Utils::SENDER_NAME);
             });
 

@@ -293,7 +293,8 @@
         <div class="row">
             <div class="col-sm-4">
                 <label for="special_remark">Voucher Special Remark:</label>
-                <input type="text" id="special_remark" class="form-control">
+                <input type="text" id="special_remark"
+                class="form-control" @if(isset($voucher->special_remark)) value="{{ $voucher->special_remark }}" @endif>
             </div>
         </div>
         <br><hr>
