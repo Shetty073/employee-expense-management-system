@@ -318,10 +318,18 @@
                 <div class="col-sm-4">
                     <label for="paymentMode">Payment Mode:</label>
                     <select class="form-control" id="paymentMode">
-                        <option value="0">{{ App\Accunity\Utils::PAYMENT_MODES[0] }}</option>
-                        <option value="1">{{ App\Accunity\Utils::PAYMENT_MODES[1] }}</option>
-                        <option value="2">{{ App\Accunity\Utils::PAYMENT_MODES[2] }}</option>
-                        <option value="3">{{ App\Accunity\Utils::PAYMENT_MODES[3] }}</option>
+                        <option @if(isset($voucher->payment_mode_draft)) @if($voucher->payment_mode_draft === 0) selected @endif @endif value="0">
+                            {{ App\Accunity\Utils::PAYMENT_MODES[0] }}
+                        </option>
+                        <option @if(isset($voucher->payment_mode_draft)) @if($voucher->payment_mode_draft === 1) selected @endif @endif value="1">
+                            {{ App\Accunity\Utils::PAYMENT_MODES[1] }}
+                        </option>
+                        <option @if(isset($voucher->payment_mode_draft)) @if($voucher->payment_mode_draft === 2) selected @endif @endif value="2">
+                            {{ App\Accunity\Utils::PAYMENT_MODES[2] }}
+                        </option>
+                        <option @if(isset($voucher->payment_mode_draft)) @if($voucher->payment_mode_draft === 3) selected @endif @endif value="3">
+                            {{ App\Accunity\Utils::PAYMENT_MODES[3] }}
+                        </option>
                     </select>
                 </div>
             </div>
@@ -329,11 +337,12 @@
                 <div class="form-group col-sm-4">
                     <label for="date">Payment Date</label>
                     <input type="date" class="form-control" id="date" name="date"
-                    value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                    @if(isset($voucher->payment_date_draft)) value="{{ $voucher->payment_date_draft->format('Y-m-d') }}" @else value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" @endif required>
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="remark">Payment Remark</label>
-                    <input type="text" class="form-control" id="remark" name="remark" required>
+                    <input type="text" class="form-control" id="remark" name="remark"
+                    @if(isset($voucher->payment_remark_draft)) value="{{ $voucher->payment_remark_draft }}" @endif required>
                 </div>
             </div>
         </form>

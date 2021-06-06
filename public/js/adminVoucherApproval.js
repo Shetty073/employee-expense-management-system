@@ -76,11 +76,12 @@ $(document).on('click', '#saveVoucherDraftBtn', function () {
     let voucherId = $('#voucherId').val();
     let csrft = $('meta[name="csrf-token"]').attr('content');
     let url = $('#voucherSaveDraftUrl').val();
-    let date = $('#date').val();
-    let payment_mode = $('#paymentMode').val();
-    let amount = $('#totalAmountPaid').val();
     let remark = $('#remark').val();
     let special_remark = $('#special_remark').val();
+    let amount = $('#totalAmountPaid').val();
+    let payment_mode = $('#paymentMode').val();
+    let date = $('#date').val();
+    let payment_remark = $('#remark').val();
 
     let expense_remarks = {};
     let expense_amounts = {};
@@ -131,9 +132,10 @@ $(document).on('click', '#saveVoucherDraftBtn', function () {
                     },
                     body: JSON.stringify({
                         'voucher_id': voucherId,
+                        'amount': amount,
                         'date': date,
                         'payment_mode': payment_mode,
-                        'amount': amount,
+                        'payment_remark': payment_remark,
                         'remark': remark,
                         'special_remark': special_remark,
                         'expense_remarks': expense_remarks,

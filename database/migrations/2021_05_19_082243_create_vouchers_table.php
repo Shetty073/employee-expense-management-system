@@ -21,6 +21,9 @@ class CreateVouchersTable extends Migration
             $table->date('approval_date')->nullable();
             $table->decimal('approved_amount')->nullable();
             $table->integer('status')->default(0);
+            $table->integer('payment_mode_draft')->nullable();
+            $table->date('payment_date_draft')->nullable();
+            $table->string('payment_remark_draft')->nullable();
             $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('CASCADE');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('CASCADE');
             $table->timestamps();

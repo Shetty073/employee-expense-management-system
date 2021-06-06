@@ -452,6 +452,9 @@ class VoucherController extends Controller
         // this will respond to fetch API request and based on data
         // it will set the status of voucher to 2 (approved) or 3 (rejected)
         $voucherId = json_decode($request->getContent(), true)['voucher_id'];
+        $payemnt_date_draft = json_decode($request->getContent(), true)['date'];
+        $payment_mode_draft = json_decode($request->getContent(), true)['payment_mode'];
+        $payment_remark_draft = json_decode($request->getContent(), true)['payment_remark'];
         $special_remark = json_decode($request->getContent(), true)['special_remark'];
         $expense_remarks = json_decode($request->getContent(), true)['expense_remarks'];
         $expense_amounts = json_decode($request->getContent(), true)['expense_amounts'];
@@ -459,6 +462,9 @@ class VoucherController extends Controller
         $voucher = Voucher::findorfail($voucherId);
         $voucher->update([
             'special_remark' => $special_remark,
+            'payment_date_draft' => $payemnt_date_draft,
+            'payment_mode_draft' => $payment_mode_draft,
+            'payment_remark_draft' => $payment_remark_draft,
         ]);
 
         // update the remarks for each expense if any

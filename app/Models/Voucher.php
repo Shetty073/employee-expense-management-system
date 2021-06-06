@@ -16,12 +16,16 @@ class Voucher extends Model
         'approved_amount',
         'approval_date',
         'special_remark',
+        'payment_mode_draft',
+        'payment_date_draft',
+        'payment_remark_draft',
     ];
 
     protected $casts = [
         'approved_amount' => 'double',
         'approval_date' => 'date',
         'date' => 'date',
+        'payment_date_draft' => 'date',
     ];
 
     public function expenses()
