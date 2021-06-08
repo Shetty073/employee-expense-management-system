@@ -98,6 +98,11 @@ class VoucherController extends Controller
                     .thin-col {
                         max-width: 15px !important;
                     }
+
+                    table {
+                        font-family: DejaVu Sans;
+                        table-layout: fixed !important;
+                    }
                 </style>
             </head>
             <body>';
@@ -151,7 +156,34 @@ class VoucherController extends Controller
                 </tr>
             </thead>
             <tbody>';
-                foreach ($expenses as $expense) {
+
+            foreach ($expenses as $expense) {
+                    $description = $expense->description;
+                    $description_arr = explode(' ', $description);
+                    $description = [];
+
+                    for ($i=0; $i < count($description_arr); $i++) {
+                        array_push($description, $description_arr[$i]);
+                        if($i % 2 === 0) {
+                            array_push($description, '<br>');
+                        }
+                    }
+
+                    $description = implode(' ', $description);
+
+                    $remark = $expense->remark;
+                    $remark_arr = explode(' ', $remark);
+                    $remark = [];
+
+                    for ($i=0; $i < count($remark_arr); $i++) {
+                        array_push($remark, $remark_arr[$i]);
+                        if($i % 2 === 0) {
+                            array_push($remark, '<br>');
+                        }
+                    }
+
+                    $remark = implode(' ', $remark);
+
                     $content .= '<tr>
                         <td>' . $expense->date->format('d-M-Y') . '</td>
                         <td>' . ExpenseCategory::where('id', $expense->category_id)->first()->name . '</td>
@@ -161,9 +193,9 @@ class VoucherController extends Controller
                         <td>';
                         $content .= '₹ ' . $expense->approved_amount;
                         $content .= '</td>
-                        <td>' . $expense->description . '</td>
+                        <td>' . $description . '</td>
                         <td>' .
-                            $expense->remark
+                            $remark
                         . '</td>
                         <td>';
                         if(count($expense->bills) > 0) {
@@ -351,7 +383,7 @@ class VoucherController extends Controller
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($content);
 
-        $fileName = 'voucher_report_' . $voucher->approval_date->format('d_m_Y') . '.pdf';
+        $fileName =  $voucher->number . '.pdf';
         return $pdf->download($fileName);
     }
 
@@ -436,6 +468,7 @@ class VoucherController extends Controller
             'voucher' => $voucher,
             'emailmessage' => $emailmessage,
         ];
+
         $emails = [$employee->email, 'anujdxb@gmail.com', 'accounts@litmusinternational.com'];
         Mail::send('emails.voucherstatus', $data, function($message) use ($employee, $emailsubject, $emails) {
             $message->to($emails, $employee->name)->subject($emailsubject);
