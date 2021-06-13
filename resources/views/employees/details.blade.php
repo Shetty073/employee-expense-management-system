@@ -129,7 +129,9 @@
                                 <form id="addExpenseBillsForm{{ $expense->id }}" action="{{ route('vouchers.addExpenseBills') }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="btn-group" role="group">
-                                        <span class="badge badge-danger">Bill Not Provided</span>
+                                        <div>
+                                            <span class="badge badge-danger">Bill Not Provided</span>
+                                        </div>
                                         <input type="hidden" name="expenseid" value="{{ $expense->id }}">
                                         <input type="file" name="bill[]" id="billupload{{ $expense->id }}" multiple hidden>
                                         @if($voucher->status < 2)

@@ -183,7 +183,11 @@
                         </td>
                         <td class="data">{{ $expense->description }}</td>
                         <td>
-                            <a href="#">click to download</a>
+                            @if(count($expense->bills) > 0)
+                                <a href="#">click to download</a>
+                            @else
+                                <span class="badge badge-danger">Bill Not Provided</span>
+                            @endif
                         </td>
                     </tr>
                     @foreach ($expense->bills as $bill)
