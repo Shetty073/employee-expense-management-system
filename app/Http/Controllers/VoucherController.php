@@ -834,9 +834,17 @@ class VoucherController extends Controller
         ]);
 
         if ($request->hasFile('bill')) {
-            $bills = $request->file('bill');
+            // delete old bills
+            $old_bills = Bill::where('expense_id', $expense->id)->get();
+            foreach ($old_bills as $old_bill) {
+                $file_path = public_path('storage/bill/' . $old_bill->file_name);
+                @unlink($file_path);
 
-            // Save the bill files
+                $old_bill->delete();
+            }
+
+            // Save the new bill files
+            $bills = $request->file('bill');
             foreach ($bills as $billfile) {
                 $bill = Bill::create([
                     'file_name' => '',
@@ -851,15 +859,6 @@ class VoucherController extends Controller
                 $bill->file_name = $fileNameToStore;
                 $bill->expense()->associate($expense);
                 $bill->save();
-
-                // delete old bills
-                $old_bills = Bill::where('expense_id', $expense->id)->get();
-                foreach ($old_bills as $old_bill) {
-                    $file_path = public_path('storage/bill/' . $old_bill->file_name);
-                    @unlink($file_path);
-
-                    $old_bill->delete();
-                }
             }
 
         }
