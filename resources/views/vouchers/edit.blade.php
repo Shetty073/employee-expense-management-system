@@ -169,6 +169,7 @@
                     <th scope="col">Amount</th>
                     <th scope="col">Description</th>
                     <th scope="col">Bill</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -184,9 +185,14 @@
                         <td class="data">{{ $expense->description }}</td>
                         <td>
                             @if(count($expense->bills) > 0)
-                                <a href="#">click to download</a>
+                                <a href="#" class="mr-3">click to download</a>
                             @else
                                 <span class="badge badge-danger">Bill Not Provided</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if(count($expense->bills) > 0)
+                                <a href="{{ route('vouchers.viewExpenseBills', ['id' => $expense->id]) }}" class="btn btn-danger">Delete File(s)</a>
                             @endif
                         </td>
                     </tr>

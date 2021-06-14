@@ -554,6 +554,25 @@ class VoucherController extends Controller
         return back();
     }
 
+    public function viewExpenseBills(Request $request, $id)
+    {
+        $expense = Expense::findorfail($id);
+
+        return view('vouchers.viewbillfiles', compact('expense'));
+    }
+
+    public function deleteExpenseBills(Request $request, $id)
+    {
+        $bill = Bill::findorfail($id);
+
+        $file_path = public_path('storage/bill/' . $bill->file_name);
+        @unlink($file_path);
+
+        $bill->delete();
+
+        return redirect(route('vouchers.edit', ['id' => $bill->expense->voucher->id]));
+    }
+
     public function attachAdditionalFiles(Request $request, $id)
     {
         $voucher = Voucher::findorfail($id);

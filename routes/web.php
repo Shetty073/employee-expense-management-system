@@ -108,6 +108,8 @@ Route::group(['prefix' => '/vouchers', 'middleware' => 'auth'], function () {
     Route::post('/askForApproval', [VoucherController::class, 'askForApproval'])->name('vouchers.askForApproval')->middleware('can:employee');
 
     Route::get('/destroy/{id}', [VoucherController::class, 'destroy'])->name('vouchers.destroy')->middleware('can:employee');
+    Route::get('/vouchers/expense/{id}/view', [VoucherController::class, 'viewExpenseBills'])->name('vouchers.viewExpenseBills')->middleware('can:employee');
+    Route::post('/vouchers/expense/bill/{id}/delete', [VoucherController::class, 'deleteExpenseBills'])->name('vouchers.deleteExpenseBills')->middleware('can:employee');
 });
 
 Route::group(['prefix' => '/payments', 'middleware' => ['auth', 'can:admin']], function () {
