@@ -13,7 +13,7 @@
         <a href="{{ route('vouchers.create') }}" class="btn btn-primary">+ Create New Voucher</a>
     </div>
 
-    <br><br><br>
+    <br><br><br><br>
 
     <div class="card px-3 py-1">
 
