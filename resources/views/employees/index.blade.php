@@ -10,6 +10,10 @@
 <p>List of all your employees is visible here.</p>
 
 <div class="card px-3 py-1">
+    <div class="my-3">
+        <a class="btn btn-success float-right" href="{{ route('employees.create') }}">+ Create New Employee</a>
+    </div>
+    <br>
     <input type="text" id="searchBox" placeholder="🔍 Search the table below">
     <br>
 

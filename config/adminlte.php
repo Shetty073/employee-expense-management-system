@@ -236,13 +236,6 @@ return [
             // 'label'       => 4,
             // 'label_color' => 'success',
         ],
-        // Admin links
-        [
-            'text'        => 'Employees',
-            'url'         => '/employees',
-            'icon'        => 'fas fa-fw fa-users',
-            'can'         => 'admin',
-        ],
         [
             'text'        => 'Draft Vouchers',
             'url'         => '/vouchers/draft',
@@ -280,31 +273,13 @@ return [
             'can'         => 'admin',
         ],
         [
-            'text'        => 'Jobs',
-            'url'         => '/jobs',
-            'icon'        => 'fas fa-fw fa-briefcase',
-            'can'         => 'admin',
-        ],
-        [
-            'text'        => 'Expense Categories',
-            'url'         => '/expensecategories',
-            'icon'        => 'fas fa-fw fa-file-invoice',
-            'can'         => 'admin',
-        ],
-        [
-            'text'        => 'Admin Users',
-            'url'         => '/auth/index',
-            'icon'        => 'fas fa-fw fa-users-cog',
-            'can'         => 'admin',
-        ],
-        [
             'text'        => 'Wallet',
             'url'         => '/wallet',
             'icon'        => 'fas fa-fw fa-rupee-sign',
             'can'         => 'employee',
         ],
         [
-            'header' => 'Settings',
+            'header' => 'Masters',
             'can' => 'admin',
         ],
         // [
@@ -313,23 +288,65 @@ return [
         //     'icon' => 'fas fa-fw fa-user',
         // ],
         [
-            'text'    => 'Masters',
-            'icon'    => 'fas fa-fw fa-asterisk',
+            'text'    => 'Jobs',
+            'icon'    => 'fas fa-fw fa-briefcase',
             'submenu' => [
+                [
+                    'text'        => 'List Jobs',
+                    'url'         => '/jobs',
+                    'icon'        => 'fas fa-fw fa-briefcase',
+                    'can'         => 'admin',
+                ],
                 [
                     'text' => 'Create Job',
                     'url'  => '/jobs/create',
                     'icon'    => 'fas fa-fw fa-briefcase',
+                ],
+            ],
+            'can'         => 'admin',
+        ],
+        [
+            'text'    => 'Expense Categories',
+            'icon'    => 'fas fa-fw fa-file-invoice',
+            'submenu' => [
+                [
+                    'text'        => 'List Expense Categories',
+                    'url'         => '/expensecategories',
+                    'icon'        => 'fas fa-fw fa-file-invoice',
                 ],
                 [
                     'text'    => 'Create Expense Category',
                     'url'     => '/expensecategories/create',
                     'icon'    => 'fas fa-fw fa-file-invoice',
                 ],
+            ],
+            'can'         => 'admin',
+        ],
+        [
+            'text'    => 'Employees',
+            'icon'    => 'fas fa-fw fa-users',
+            'submenu' => [
+                [
+                    'text'        => 'List Employees',
+                    'url'         => '/employees',
+                    'icon'        => 'fas fa-fw fa-users',
+                ],
                 [
                     'text' => 'Create Employee',
                     'url'  => '/employees/create',
                     'icon'    => 'fas fa-fw fa-users',
+                ],
+            ],
+            'can'         => 'admin',
+        ],
+        [
+            'text'    => 'Admin Users',
+            'icon'    => 'fas fa-fw fa-users-cog',
+            'submenu' => [
+                [
+                    'text'        => 'List Admin Users',
+                    'url'         => '/auth/index',
+                    'icon'        => 'fas fa-fw fa-users-cog',
                 ],
                 [
                     'text' => 'Create Admin Users',

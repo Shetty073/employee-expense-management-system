@@ -10,6 +10,10 @@
     <p>List of all jobs is visible here.</p>
 
     <div class="card px-3 py-1">
+        <div class="my-3">
+            <a class="btn btn-success float-right" href="{{ route('jobs.create') }}">+ Create New Job</a>
+        </div>
+        <br>
 
         <div class="table-responsive">
             <table class="table">
