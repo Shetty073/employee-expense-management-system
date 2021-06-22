@@ -92,7 +92,7 @@ class VoucherController extends Controller
                 <style>
                     body {
                         font-family: DejaVu Sans;
-                        font-size: 10px;
+                        font-size: 9px;
                     }
 
                     .thin-col {
@@ -109,12 +109,11 @@ class VoucherController extends Controller
 
         $content .= '
             <div class="row">
-                <div class="text-center">
-                    <img src="' . asset('logo/logo.jpg') . '" />
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-xs-3"><b>Voucher Number: ' . $voucher->number . '</b></div>
+                <div class="col-xs-6"></div>
+                <div class="col-xs-3">
+                    <img height="30" src="' . asset('logo/logo.jpg') . '" />
+                </div>
             </div>';
 
         $content .= '
@@ -143,16 +142,16 @@ class VoucherController extends Controller
             </div><br>';
 
         $content .= '<div class="table-responsive">
-        <table class="table">
+        <table class="table" style="table-layout:fixed;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Proposed Amt.</th>
-                    <th scope="col">Approved Amt.</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Remark</th>
-                    <th scope="col">Bill</th>
+                    <th style="width:10%;" scope="col">Date</th>
+                    <th style="width:10%;" scope="col">Category</th>
+                    <th style="width:10%;" scope="col">Proposed Amt.</th>
+                    <th style="width:10%;" scope="col">Approved Amt.</th>
+                    <th style="width:15%;" scope="col">Description</th>
+                    <th style="width:10%;" scope="col">Remark</th>
+                    <th style="width:5%;" scope="col">Bill</th>
                 </tr>
             </thead>
             <tbody>';
@@ -164,7 +163,7 @@ class VoucherController extends Controller
 
                     for ($i=0; $i < count($description_arr); $i++) {
                         array_push($description, $description_arr[$i]);
-                        if($i % 2 === 0) {
+                        if($i % 2 !== 0 and $i !== 0) {
                             array_push($description, '<br>');
                         }
                     }
