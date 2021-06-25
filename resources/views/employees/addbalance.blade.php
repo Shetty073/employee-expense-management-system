@@ -10,7 +10,7 @@
 
 <div class="card px-3 py-1">
 
-    <form method="POST" action="{{ route('employees.addbalance', ['id' => $employee->id]) }}" enctype="multipart/form-data">
+    <form id="addBalanceForm" method="POST" action="{{ route('employees.addbalance', ['id' => $employee->id]) }}" enctype="multipart/form-data">
         @if ($errors->any())
             <div class="border border-danger text-danger">
                 <ul>
@@ -57,7 +57,7 @@
         </div>
 
         <div class="form-group mt-3">
-            <input type="submit" class="btn btn-success" value="Add">
+            <input id="addBalanceBtn" type="button" class="btn btn-success" value="Add">
             <input type="button" class="btn btn-danger ml-3" value="Cancel" onclick="window.history.back()">
         </div>
 
@@ -68,7 +68,7 @@
 @stop
 
 
-{{-- @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-@stop --}}
+@section('js')
+    <script src="{{ asset('js/addbalance.js') }}"></script>
+@stop
 
