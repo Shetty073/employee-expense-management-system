@@ -41,7 +41,7 @@
                             @endforeach
                         </td>
                         <td>{{ $voucher->number }}</td>
-                        <td>{{ $voucher->date->format('d-M-Y') }}</td>
+                        <td>@if(isset($voucher->date)){{ $voucher->date->format('d-M-Y') }}@endif</td>
                         <td>
                             <span class="badge badge-primary px-2 py-2">
                                 ₹ {{ $total_amt }}

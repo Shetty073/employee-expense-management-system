@@ -44,7 +44,7 @@
                             @endforeach
                         </td>
                         <td>{{ $voucher->number }}</td>
-                        <td>{{ $voucher->date->format('d-M-Y') }}</td>
+                        <td>@if(isset($voucher->date)){{ $voucher->date->format('d-M-Y') }}@endif</td>
                         <td>
                             <span class="badge badge-warning px-2 py-2">
                                 ₹ {{ $total_amt }}
@@ -55,7 +55,7 @@
                                 ₹ {{ $voucher->approved_amount }}
                             </span>
                         </td>
-                        <td>{{ $voucher->approval_date->format('d-M-Y') }}</td>
+                        <td>@if(isset($voucher->approval_date)){{ $voucher->approval_date->format('d-M-Y') }}@endif</td>
                         <td>{{ $voucher->addprovedBy->name }}</td>
                         <td>
                             <a class="btn btn-primary" href="{{ route('employees.voucherDetails', ['id' => $voucher->id]) }}">View</a>
