@@ -134,7 +134,7 @@ class VoucherController extends Controller
                 <div class="col-xs-3"><b>Approval Date:</b> NIL </div>
             </div>';
         }
-    	
+
 
         $content .= '
         <div class="row">
@@ -153,12 +153,12 @@ class VoucherController extends Controller
         <table class="table" style="table-layout:fixed;">
             <thead class="thead-dark">
                 <tr>
-                    <th style="width:10%;" scope="col">Date</th>
-                    <th style="width:10%;" scope="col">Category</th>
-                    <th style="width:10%;" scope="col">Proposed Amt.</th>
-                    <th style="width:10%;" scope="col">Approved Amt.</th>
-                    <th style="width:15%;" scope="col">Description</th>
-                    <th style="width:10%;" scope="col">Remark</th>
+                    <th style="width:5%;" scope="col">Date</th>
+                    <th style="width:9%;" scope="col">Category</th>
+                    <th style="width:9%;" scope="col">Proposed Amt.</th>
+                    <th style="width:9%;" scope="col">Approved Amt.</th>
+                    <th style="width:22%;" scope="col">Description</th>
+                    <th style="width:11%;" scope="col">Remark</th>
                     <th style="width:5%;" scope="col">Bill</th>
                 </tr>
             </thead>
@@ -171,7 +171,7 @@ class VoucherController extends Controller
 
                     for ($i=0; $i < count($description_arr); $i++) {
                         array_push($description, $description_arr[$i]);
-                        if($i % 2 !== 0 and $i !== 0) {
+                        if($i % 4 === 0 && $i !== 0) {
                             array_push($description, '<br>');
                         }
                     }
@@ -200,7 +200,7 @@ class VoucherController extends Controller
                         <td>';
                         $content .= '₹ ' . $expense->approved_amount;
                         $content .= '</td>
-                        <td>' . $description . '</td>
+                        <td style="word-wrap: break-word;">' . $description . '</td>
                         <td>' .
                             $remark
                         . '</td>
