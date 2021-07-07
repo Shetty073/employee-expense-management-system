@@ -124,9 +124,17 @@ class VoucherController extends Controller
 
         $content .= '
             <div class="row">
-                <div class="col-xs-3"><b>Voucher Date:</b> ' . $voucher->date->format('d-M-Y') . '</div>
+                <div class="col-xs-3"><b>Voucher Date:</b> ' . $voucher->date->format('d-M-Y') . '</div>';
+    	if(isset($voucher->approval_date)) {
+        	$content .= '
                 <div class="col-xs-3"><b>Approval Date:</b> ' . $voucher->approval_date->format('d-M-Y') . '</div>
             </div>';
+        } else {
+        	$content .= '
+                <div class="col-xs-3"><b>Approval Date:</b> NIL </div>
+            </div>';
+        }
+    	
 
         $content .= '
         <div class="row">
