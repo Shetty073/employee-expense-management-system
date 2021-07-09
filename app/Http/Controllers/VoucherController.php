@@ -15,8 +15,10 @@ use App\Models\SiteCompletionDoc;
 use App\Models\SubmittedDoc;
 use App\Models\Voucher;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class VoucherController extends Controller
@@ -153,10 +155,10 @@ class VoucherController extends Controller
         <table class="table" style="table-layout:fixed;">
             <thead class="thead-dark">
                 <tr>
-                    <th style="width:5%;" scope="col">Date</th>
-                    <th style="width:9%;" scope="col">Category</th>
-                    <th style="width:9%;" scope="col">Proposed Amt.</th>
-                    <th style="width:9%;" scope="col">Approved Amt.</th>
+                    <th style="width:8%;" scope="col">Date</th>
+                    <th style="width:8%;" scope="col">Category</th>
+                    <th style="width:8%;" scope="col">Pro. Amt.</th>
+                    <th style="width:8%;" scope="col">App. Amt.</th>
                     <th style="width:22%;" scope="col">Description</th>
                     <th style="width:11%;" scope="col">Remark</th>
                     <th style="width:5%;" scope="col">Bill</th>
@@ -171,7 +173,7 @@ class VoucherController extends Controller
 
                     for ($i=0; $i < count($description_arr); $i++) {
                         array_push($description, $description_arr[$i]);
-                        if($i % 4 === 0 && $i !== 0) {
+                        if($i % 5 === 0 && $i !== 0) {
                             array_push($description, '<br>');
                         }
                     }
@@ -409,6 +411,7 @@ class VoucherController extends Controller
             'status' => $status,
             'special_remark' => $special_remark,
         ]);
+        $voucher->save();
 
         $employee = $voucher->employee()->first();
 
@@ -427,15 +430,26 @@ class VoucherController extends Controller
             $employee->wallet_balance = $wallet_balance;
             $employee->save();
 
-            $payment = Payment::create([
-                'date' => $date,
-                'payment_mode' => $payment_mode,
-                'amount' => $amount,
-                'remark' => 'Voucher Accepted - ' . $special_remark,
-            ]);
+            DB::beginTransaction();
+            try {
+                $payment = Payment::create([
+                    'date' => $date,
+                    'payment_mode' => $payment_mode,
+                    'amount' => $amount,
+                    'remark' => 'Voucher Accepted - ' . $special_remark,
+                ]);
 
-            $payment->employee()->associate($employee);
-            $payment->save();
+                $payment->employee()->associate($employee);
+                $payment->save();
+            } catch (Exception $e) {
+                DB::rollBack();
+
+                // The success is written on purpose do not change that
+                return response()->json([
+                    'process' => 'success',
+                ]);
+            }
+            DB::commit();
 
             $voucher->approved_amount = $amount;
             $voucher->addprovedBy()->associate(auth()->user());

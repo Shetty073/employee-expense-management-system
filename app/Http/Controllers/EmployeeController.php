@@ -6,7 +6,9 @@ use App\Accunity\Utils;
 use App\Models\Employee;
 use App\Models\Payment;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -121,6 +123,7 @@ class EmployeeController extends Controller
                 'wallet_balance' => 'required',
             ]);
 
+            DB::beginTransaction();
             $balance = $request->input('wallet_balance');
             // add balance to employee's account
             $employee = Employee::findorfail($id);
@@ -128,19 +131,26 @@ class EmployeeController extends Controller
             $employee->wallet_balance = $wallet_balance;
             $employee->save();
 
-            $payment = Payment::create([
-                'date' => $request->input('date'),
-                'payment_mode' => $request->input('payment_mode'),
-                'amount' => $balance,
-            ]);
+            try {
+                $payment = Payment::create([
+                    'date' => $request->input('date'),
+                    'payment_mode' => $request->input('payment_mode'),
+                    'amount' => $balance,
+                ]);
 
-            if ($request->input('remark') == null) {
-                $payment->remark = 'Balance Added';
-            } else {
-                $payment->remark = 'Balance Added - ' . $request->input('remark');
+                if ($request->input('remark') == null) {
+                    $payment->remark = 'Balance Added';
+                } else {
+                    $payment->remark = 'Balance Added - ' . $request->input('remark');
+                }
+                $payment->employee()->associate($employee);
+                $payment->save();
+            } catch (Exception $e) {
+                DB::rollBack();
+
+                return redirect(route('employees.index'));
             }
-            $payment->employee()->associate($employee);
-            $payment->save();
+            DB::commit();
 
             // Send email to employee regarding balance update
             $data = [
