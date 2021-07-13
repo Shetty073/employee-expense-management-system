@@ -148,7 +148,10 @@ class EmployeeController extends Controller
             } catch (Exception $e) {
                 DB::rollBack();
 
-                return redirect(route('employees.index'));
+                return redirect(route('employees.addbalance', ['id' => $id]))->withErrors([
+                    'wallet_balance' => 'Payment for '.$balance.' was already done today for this employee.
+                    Please select another amount.',
+                ]);
             }
             DB::commit();
 

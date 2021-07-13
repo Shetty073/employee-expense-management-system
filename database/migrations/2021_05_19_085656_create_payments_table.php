@@ -21,7 +21,7 @@ class CreatePaymentsTable extends Migration
             $table->string('remark')->nullable();
             $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('CASCADE');
             $table->timestamps();
-            $table->unique(['date', 'employee_id', 'amount']);
+            $table->unique(['date', 'employee_id', 'amount', 'remark']);
         });
     }
 
