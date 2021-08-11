@@ -1,5 +1,9 @@
-# employee-payment-wallet-system
- E-wallet for managing employees' expense reimbursement (this was devloped for a client company for their internal usage)
+# employee-expense-management-system
+Laravel based expense management system for managing site visit expenses of your employees.
+
+# Tech
+* Laravel
+* Admin LTE for laravel
 
 # Screenshots
 ![new version screenshots](/screenshots/login.png)
